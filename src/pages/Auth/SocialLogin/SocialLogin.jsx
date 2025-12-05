@@ -18,10 +18,10 @@ const SocialLogin = () => {
           photoURL: result.user.photoURL,
         };
 
-        // axiosSecure.post("/users", userInfo).then((res) => {
-        //   // console.log("user data has been stored", res.data);
-        //   navigate(location.state || "/");
-        // });
+        axiosSecure.post("/users", userInfo).then((res) => {
+          // console.log("user data has been stored", res.data);
+          navigate(location.state || "/");
+        });
       })
       .catch((error) =>{});
   };
