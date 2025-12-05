@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router";
 import useAuth from "../../../hooks/useAuth";
 import SocialLogin from "../SocialLogin/SocialLogin";
+import { toast } from "react-hot-toast";
 
 const Login = () => {
   const {
@@ -17,8 +18,14 @@ const Login = () => {
 
   const handleLogin = (data) => {
     signInUser(data.email, data.password)
-      .then(() => navigate(location?.state?.from || "/"))
-      .catch((err) => console.log(err));
+      .then(() => {
+        toast.success("Login successful!");
+        navigate(location?.state?.from || "/");
+      })
+      .catch((err) => {
+        console.error(err);
+        toast.error(err.message || "Login failed. Please try again.");
+      });
   };
 
   return (
@@ -64,15 +71,11 @@ const Login = () => {
                       <input
                         type="email"
                         placeholder="Enter your email"
-                        {...register("email", {
-                          required: "Email is required",
-                        })}
+                        {...register("email", { required: "Email is required" })}
                         className="form-input w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-background-light dark:bg-background-dark p-4 text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary"
                       />
                       {errors.email && (
-                        <span className="text-red-500 text-sm">
-                          {errors.email.message}
-                        </span>
+                        <span className="text-red-500 text-sm">{errors.email.message}</span>
                       )}
                     </label>
 
@@ -102,15 +105,13 @@ const Login = () => {
                         </button>
                       </div>
                       {errors.password && (
-                        <span className="text-red-500 text-sm">
-                          {errors.password.message}
-                        </span>
+                        <span className="text-red-500 text-sm">{errors.password.message}</span>
                       )}
                     </label>
 
                     <button
                       type="submit"
-                      className="btn  border-none text-white bg-gradient-to-r from-[#667eea] to-[#764ba2] hover:opacity-90"
+                      className="btn border-none text-white bg-gradient-to-r from-[#667eea] to-[#764ba2] hover:opacity-90"
                     >
                       Log In
                     </button>
@@ -124,10 +125,7 @@ const Login = () => {
                   {/* REGISTER LINK */}
                   <p className="text-center text-sm text-slate-500 dark:text-slate-400">
                     Don't have an account?{" "}
-                    <Link
-                      className="font-bold text-primary hover:underline"
-                      to="/register"
-                    >
+                    <Link className="font-bold text-primary hover:underline" to="/register">
                       Create Account
                     </Link>
                   </p>

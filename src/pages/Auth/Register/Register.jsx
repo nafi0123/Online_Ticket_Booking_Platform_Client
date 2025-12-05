@@ -5,6 +5,7 @@ import useAuth from "../../../hooks/useAuth";
 import SocialLogin from "../SocialLogin/SocialLogin";
 import axios from "axios";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { toast } from "react-hot-toast";
 
 const Register = () => {
   const { registerUser, updateUserProfile } = useAuth();
@@ -20,6 +21,11 @@ const Register = () => {
   } = useForm();
 
   const handleRegistration = (data) => {
+    if (!data.photo[0]) {
+      toast.error("Profile photo is required");
+      return;
+    }
+
     const profileImg = data.photo[0];
 
     registerUser(data.email, data.password)
@@ -42,19 +48,37 @@ const Register = () => {
             };
 
             // Save to backend
-            axiosSecure.post("/users", userInfo).then((res) => {
-              if (res.data.insertedId) console.log(res.data.insertedId);
-            });
+            axiosSecure
+              .post("/users", userInfo)
+              .then((res) => {
+                if (res.data.insertedId) {
+                  toast.success("Registration successful!");
+                  console.log(res.data.insertedId);
+                }
+              })
+              .catch((err) => {
+                console.error(err);
+                toast.error("Failed to save user to database");
+              });
 
             // Update Firebase profile
             const userProfile = { displayName: data.name, photoURL };
             updateUserProfile(userProfile)
               .then(() => navigate(location.state?.from || "/"))
-              .catch((err) => console.log(err));
+              .catch((err) => {
+                console.error(err);
+                toast.error("Failed to update user profile");
+              });
           })
-          .catch((err) => console.log(err));
+          .catch((err) => {
+            console.error(err);
+            toast.error("Image upload failed");
+          });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.error(err);
+        toast.error(err.message || "Registration failed");
+      });
   };
 
   return (
@@ -139,15 +163,11 @@ const Register = () => {
                       <input
                         type="file"
                         accept="image/*"
-                        {...register("photo", {
-                          required: "Profile photo is required",
-                        })}
+                        {...register("photo", { required: "Profile photo is required" })}
                         className="file-input w-full mt-1"
                       />
                       {errors.photo && (
-                        <span className="text-red-500 text-sm">
-                          {errors.photo.message}
-                        </span>
+                        <span className="text-red-500 text-sm">{errors.photo.message}</span>
                       )}
                     </label>
 
@@ -162,10 +182,7 @@ const Register = () => {
                           placeholder="Enter your password"
                           {...register("password", {
                             required: "Password is required",
-                            minLength: {
-                              value: 6,
-                              message: "At least 6 characters",
-                            },
+                            minLength: { value: 6, message: "At least 6 characters" },
                             pattern: {
                               value: /^(?=.*[a-z])(?=.*[A-Z]).*$/,
                               message: "Must contain uppercase & lowercase",
@@ -182,9 +199,7 @@ const Register = () => {
                         </button>
                       </div>
                       {errors.password && (
-                        <span className="text-red-500 text-sm">
-                          {errors.password.message}
-                        </span>
+                        <span className="text-red-500 text-sm">{errors.password.message}</span>
                       )}
                     </label>
 
@@ -205,10 +220,7 @@ const Register = () => {
                   {/* LOGIN LINK */}
                   <p className="text-center text-sm text-slate-500 dark:text-slate-400">
                     Already have an account?{" "}
-                    <Link
-                      className="font-bold text-primary hover:underline"
-                      to="/login"
-                    >
+                    <Link className="font-bold text-primary hover:underline" to="/login">
                       Log In
                     </Link>
                   </p>

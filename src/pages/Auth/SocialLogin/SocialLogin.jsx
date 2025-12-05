@@ -1,5 +1,6 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router";
+import toast from "react-hot-toast";         // <-- ADD THIS
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
@@ -18,16 +19,20 @@ const SocialLogin = () => {
           photoURL: result.user.photoURL,
         };
 
-        axiosSecure.post("/users", userInfo).then((res) => {
-          // console.log("user data has been stored", res.data);
+        axiosSecure.post("/users", userInfo).then(() => {
+          toast.success("Google login successful!"); // <-- SUCCESS TOAST
           navigate(location.state || "/");
         });
       })
-      .catch((error) =>{});
+      .catch((error) => {
+        console.error(error);
+        toast.error("Google login failed!"); // <-- ERROR TOAST
+      });
   };
 
   return (
     <div className="pt-4">
+
       {/* Divider */}
       <div className="flex items-center justify-center my-4">
         <div className="h-px bg-gray-300 w-1/3"></div>

@@ -1,27 +1,37 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import NavBar from "../pages/Shared/NavBar/NavBar";
 import { Outlet } from "react-router";
-// import Footer from "../pages/Shared/Footer/Footer";
 
 const RootLayout = () => {
+  const [theme, setTheme] = useState("light");
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") || "light";
+    setTheme(savedTheme);
+  }, []);
+
   return (
-    // bg-gray-100
-    <div className="">
-      <div className=" sticky top-0 z-50">
-        {" "}
+    <div>
+      {/* NavBar Wrapper */}
+      <div
+        className={`
+          sticky top-0 z-50 shadow-md 
+          ${
+            theme === "dark"
+              ? "bg-[#1b1c1d] shadow-[0_2px_10px_rgba(0,0,0,0.6)]"
+              : " shadow"
+          }
+        `}
+      >
         <div className="max-w-7xl mx-auto">
-          {/* Full width navbar */}
           <NavBar />
         </div>
       </div>
 
-      {/* Centered main content */}
-      <main className="max-w-7xl mx-auto">
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto z-1000">
         <Outlet />
       </main>
-
-      {/* Full width footer */}
-      {/* <Footer /> */}
     </div>
   );
 };
