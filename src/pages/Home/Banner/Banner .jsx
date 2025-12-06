@@ -54,7 +54,7 @@ const Banner = () => {
               </p>
 
               {/* চাইলে এখানে একটি সুন্দর বাটনও যোগ করতে পারেন */}
-              <button className="mt-4 px-6 py-2 bg-red-600 text-white font-semibold rounded hover:bg-red-700 transition duration-300">
+              <button className="mt-4 px-6 py-2 btn btn bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white">
                 Explore Now
               </button>
             </div>
