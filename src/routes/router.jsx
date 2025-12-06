@@ -8,6 +8,8 @@ import PrivateRoute from "./PrivateRoute/PrivateRoute";
 import DashboardHome from "../pages/Dashboard/DashboardHome/DashboardHome";
 import DashboardLayout from "../layouts/DashboardLayout";
 import AddTicket from "../pages/Dashboard/AddTicket/AddTicket";
+import ManageTickets from "../pages/Dashboard/ManageTickets/ManageTickets.JSX";
+
 
 export const router = createBrowserRouter([
   {
@@ -48,6 +50,10 @@ export const router = createBrowserRouter([
       {
         path: "add-ticket",
         Component: AddTicket,
+      },
+      {
+        path: "manage-tickets",
+        Component: ManageTickets,
       },
     ],
   },
