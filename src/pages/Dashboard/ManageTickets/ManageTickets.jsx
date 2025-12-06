@@ -10,7 +10,7 @@ const ManageTickets = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
 
-  // Load pending tickets
+
   const {
     data: tickets = [],
     isLoading,
@@ -24,7 +24,7 @@ const ManageTickets = () => {
     enabled: !!user?.email,
   });
 
-  // Approve Ticket
+
   const handleApprove = (ticket) => {
     Swal.fire({
       title: "Approve Ticket?",

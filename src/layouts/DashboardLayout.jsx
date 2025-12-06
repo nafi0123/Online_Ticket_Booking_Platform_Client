@@ -127,7 +127,7 @@ const DashboardLayout = () => {
 
                 <li>
                   <NavLink
-                    to="/dashboard/my-Added-Tickets"
+                    to="/dashboard/my-added-tickets"
                     className={({ isActive }) =>
                       isActive
                         ? "btn btn-sm w-full justify-start bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white shadow-xl border-none font-bold hover:opacity-95"

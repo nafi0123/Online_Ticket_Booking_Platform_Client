@@ -9,7 +9,9 @@ import DashboardHome from "../pages/Dashboard/DashboardHome/DashboardHome";
 import DashboardLayout from "../layouts/DashboardLayout";
 import AddTicket from "../pages/Dashboard/AddTicket/AddTicket";
 import ManageTickets from "../pages/Dashboard/ManageTickets/ManageTickets.JSX";
-
+import AdminRoute from "./AdminRoute/AdminRoute";
+import VendorRoute from "./VendorRoute/VendorRoute";
+import MyAddedTickets from "../pages/Dashboard/MyAddedTickets/MyAddedTickets";
 
 export const router = createBrowserRouter([
   {
@@ -49,11 +51,28 @@ export const router = createBrowserRouter([
       },
       {
         path: "add-ticket",
-        Component: AddTicket,
+        element: (
+          <VendorRoute>
+            <AddTicket></AddTicket>
+          </VendorRoute>
+        ),
+      },
+      {
+        path: "my-added-tickets",
+        element: (
+          <VendorRoute>
+            <MyAddedTickets></MyAddedTickets>
+          </VendorRoute>
+        ),
       },
       {
         path: "manage-tickets",
-        Component: ManageTickets,
+
+        element: (
+          <AdminRoute>
+            <ManageTickets></ManageTickets>
+          </AdminRoute>
+        ),
       },
     ],
   },
