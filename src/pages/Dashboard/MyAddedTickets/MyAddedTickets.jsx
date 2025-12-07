@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
@@ -9,6 +9,15 @@ import { useForm } from "react-hook-form";
 const MyAddedTickets = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
+
+  // 🌙 Theme State
+  const [theme, setTheme] = useState("light");
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") || "light";
+    setTheme(savedTheme);
+  }, []);
+
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [perksState, setPerksState] = useState({
@@ -23,7 +32,11 @@ const MyAddedTickets = () => {
 
   const { register, handleSubmit, reset } = useForm();
 
-  const { data: myTickets = [], isLoading, refetch } = useQuery({
+  const {
+    data: myTickets = [],
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["my-added-tickets", user?.email],
     queryFn: async () => {
       const res = await axiosSecure.get(`/tickets?vendorEmail=${user?.email}`);
@@ -33,8 +46,9 @@ const MyAddedTickets = () => {
   });
 
   const handleUpdateClick = (ticket) => {
-    // Check status for both "reject" and "rejected"
-    const rejected = ["reject", "rejected"].includes((ticket.status || "").toLowerCase());
+    const rejected = ["reject", "rejected"].includes(
+      (ticket.status || "").toLowerCase()
+    );
     setIsRejectedModal(rejected);
 
     setSelectedTicket(ticket);
@@ -91,7 +105,9 @@ const MyAddedTickets = () => {
   };
 
   const handleDelete = (ticket) => {
-    const rejected = ["reject", "rejected"].includes((ticket.status || "").toLowerCase());
+    const rejected = ["reject", "rejected"].includes(
+      (ticket.status || "").toLowerCase()
+    );
     if (rejected) return;
 
     Swal.fire({
@@ -102,6 +118,8 @@ const MyAddedTickets = () => {
       confirmButtonColor: "#d33",
       cancelButtonColor: "#3085d6",
       confirmButtonText: "Yes, delete it!",
+      background: theme === "dark" ? "#1f2937" : "#ffffff",
+      color: theme === "dark" ? "#f3f4f6" : "#1f2937",
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
@@ -117,14 +135,20 @@ const MyAddedTickets = () => {
     });
   };
 
-  
-
   if (isLoading) return <Loading />;
-
-  console.log(myTickets)
 
   return (
     <div className="p-6 min-h-screen bg-base-200">
+      {/* 🌙 Theme Toggle Button */}
+      <div className="flex justify-end mb-5">
+        <button
+          onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+          className="btn btn-sm"
+        >
+          {theme === "light" ? "Dark Mode" : "Light Mode"}
+        </button>
+      </div>
+
       <h2 className="text-4xl font-extrabold text-center mb-10 bg-gradient-to-r from-[#667eea] to-[#764ba2] bg-clip-text text-transparent">
         My Added Tickets
       </h2>
@@ -136,7 +160,9 @@ const MyAddedTickets = () => {
       ) : (
         <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {myTickets.map((ticket) => {
-            const isRejected = ["reject", "rejected"].includes((ticket.status || "").toLowerCase());
+            const isRejected = ["reject", "rejected"].includes(
+              (ticket.status || "").toLowerCase()
+            );
 
             const statusStyle =
               ticket.status === "pending"
@@ -153,11 +179,17 @@ const MyAddedTickets = () => {
                 }`}
               >
                 <figure className="h-48">
-                  <img src={ticket.image} alt={ticket.title} className="w-full h-full object-cover" />
+                  <img
+                    src={ticket.image}
+                    alt={ticket.title}
+                    className="w-full h-full object-cover"
+                  />
                 </figure>
 
                 <div className="card-body p-6">
-                  <h3 className="card-title text-xl font-bold">{ticket.title}</h3>
+                  <h3 className="card-title text-xl font-bold">
+                    {ticket.title}
+                  </h3>
                   <p className="text-base-content/70">
                     {ticket.from} → {ticket.to}
                   </p>
@@ -165,10 +197,13 @@ const MyAddedTickets = () => {
                     Type: <span className="font-semibold">{ticket.type}</span>
                   </p>
                   <p>
-                    Price: <span className="font-bold text-xl">৳{ticket.price}</span>
+                    Price:{" "}
+                    <span className="font-bold text-xl">৳{ticket.price}</span>
                   </p>
                   <p>Seats: {ticket.quantity}</p>
-                  <p>Departure: {new Date(ticket.departure).toLocaleString()}</p>
+                  <p>
+                    Departure: {new Date(ticket.departure).toLocaleString()}
+                  </p>
 
                   <div className="mt-4">
                     <span className={`badge badge-lg ${statusStyle} font-bold`}>
@@ -195,7 +230,7 @@ const MyAddedTickets = () => {
                       className={`flex-1 btn text-white font-bold ${
                         isRejected
                           ? "bg-gray-500 cursor-not-allowed opacity-60"
-                          : "bg-gradient-to-r from-red-500 to-red-700 hover:opacity-90 shadow-lg"
+                          : "btn btn-error text-white flex items-center"
                       }`}
                     >
                       Delete
@@ -208,6 +243,7 @@ const MyAddedTickets = () => {
         </div>
       )}
 
+      {/* Update Modal */}
       {modalOpen && selectedTicket && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/30 backdrop-blur-sm"></div>
@@ -226,12 +262,28 @@ const MyAddedTickets = () => {
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              {/* Inputs */}
               <div className="grid md:grid-cols-2 gap-6">
-                {["title", "type", "from", "to", "price", "quantity", "departure"].map((field, i) => (
+                {[
+                  "title",
+                  "type",
+                  "from",
+                  "to",
+                  "price",
+                  "quantity",
+                  "departure",
+                ].map((field, i) => (
                   <div key={i}>
-                    <label className="block font-semibold mb-2">{field.charAt(0).toUpperCase() + field.slice(1)}</label>
+                    <label className="block font-semibold mb-2">
+                      {field.charAt(0).toUpperCase() + field.slice(1)}
+                    </label>
+
                     {field === "type" ? (
-                      <select {...register("type")} className="select select-bordered w-full h-14" disabled={isRejectedModal}>
+                      <select
+                        {...register("type")}
+                        className="select select-bordered w-full h-14"
+                        disabled={isRejectedModal}
+                      >
                         <option>Bus</option>
                         <option>Train</option>
                         <option>Launch</option>
@@ -240,7 +292,13 @@ const MyAddedTickets = () => {
                     ) : (
                       <input
                         {...register(field)}
-                        type={field === "price" || field === "quantity" ? "number" : field === "departure" ? "datetime-local" : "text"}
+                        type={
+                          field === "price" || field === "quantity"
+                            ? "number"
+                            : field === "departure"
+                            ? "datetime-local"
+                            : "text"
+                        }
                         className="input input-bordered w-full h-14"
                         disabled={isRejectedModal}
                       />
@@ -254,7 +312,10 @@ const MyAddedTickets = () => {
                 <h4 className="font-bold text-lg mb-4">Perks & Facilities</h4>
                 <div className="grid grid-cols-3 gap-4">
                   {Object.keys(perksState).map((perk) => (
-                    <label key={perk} className="flex items-center gap-3 cursor-pointer">
+                    <label
+                      key={perk}
+                      className="flex items-center gap-3 cursor-pointer"
+                    >
                       <input
                         type="checkbox"
                         name={perk}
@@ -263,7 +324,9 @@ const MyAddedTickets = () => {
                         className="checkbox checkbox-primary"
                         disabled={isRejectedModal}
                       />
-                      <span className="capitalize font-medium">{perk === "ac" ? "AC" : perk === "tv" ? "TV" : perk}</span>
+                      <span className="capitalize font-medium">
+                        {perk === "ac" ? "AC" : perk === "tv" ? "TV" : perk}
+                      </span>
                     </label>
                   ))}
                 </div>
@@ -271,12 +334,22 @@ const MyAddedTickets = () => {
 
               {/* Current Image */}
               <div>
-                <label className="block font-semibold mb-2">Current Image</label>
-                <img src={selectedTicket.image} alt="Current" className="w-full max-w-md rounded-xl shadow-lg" />
+                <label className="block font-semibold mb-2">
+                  Current Image
+                </label>
+                <img
+                  src={selectedTicket.image}
+                  alt="Current"
+                  className="w-full max-w-md rounded-xl shadow-lg"
+                />
               </div>
 
               <div className="flex justify-end gap-4 pt-6">
-                <button type="button" onClick={() => setModalOpen(false)} className="btn btn-outline">
+                <button
+                  type="button"
+                  onClick={() => setModalOpen(false)}
+                  className="btn btn-outline"
+                >
                   Cancel
                 </button>
                 <button

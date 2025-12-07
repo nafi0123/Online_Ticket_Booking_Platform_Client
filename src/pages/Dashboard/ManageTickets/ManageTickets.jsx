@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useAuth from "../../../hooks/useAuth";
@@ -9,7 +9,12 @@ import { FaCheck, FaTimes } from "react-icons/fa";
 const ManageTickets = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
+  const [theme, setTheme] = useState("light");
 
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") || "light";
+    setTheme(savedTheme);
+  }, []);
 
   const {
     data: tickets = [],
@@ -34,6 +39,8 @@ const ManageTickets = () => {
       confirmButtonColor: "#16a34a",
       cancelButtonColor: "#dc2626",
       confirmButtonText: "Yes, approve",
+            background: theme === "dark" ? "#1f2937" : "#ffffff",
+      color: theme === "dark" ? "#f3f4f6" : "#1f2937",
     }).then((result) => {
       if (result.isConfirmed) {
         axiosSecure
@@ -61,6 +68,8 @@ const ManageTickets = () => {
       confirmButtonColor: "#dc2626",
       cancelButtonColor: "#6b7280",
       confirmButtonText: "Yes, reject",
+            background: theme === "dark" ? "#1f2937" : "#ffffff",
+      color: theme === "dark" ? "#f3f4f6" : "#1f2937",
     }).then((result) => {
       if (result.isConfirmed) {
         axiosSecure

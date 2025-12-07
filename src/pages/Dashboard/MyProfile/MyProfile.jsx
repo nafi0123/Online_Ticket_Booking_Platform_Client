@@ -12,7 +12,7 @@ const MyProfile = () => {
     queryKey: ["user-profile", user?.email],
     queryFn: async () => {
       const res = await axiosSecure.get(`/users/${user.email}/role`);
-      return res.data || { role: "user", createdAt: new Date().toISOString() };
+      return res.data ;
     },
     enabled: !!user?.email,
   });

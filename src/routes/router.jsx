@@ -13,6 +13,8 @@ import AdminRoute from "./AdminRoute/AdminRoute";
 import VendorRoute from "./VendorRoute/VendorRoute";
 import MyAddedTickets from "../pages/Dashboard/MyAddedTickets/MyAddedTickets";
 import MyProfile from "../pages/Dashboard/MyProfile/MyProfile";
+import AdvertiseTickets from "../pages/Dashboard/AdvertiseTickets/AdvertiseTickets";
+import UserManagement from "../pages/Dashboard/UserManagement";
 
 export const router = createBrowserRouter([
   {
@@ -73,6 +75,24 @@ export const router = createBrowserRouter([
         element: (
           <AdminRoute>
             <ManageTickets></ManageTickets>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "advertise-tickets",
+
+        element: (
+          <AdminRoute>
+            <AdvertiseTickets></AdvertiseTickets>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "user-management",
+
+        element: (
+          <AdminRoute>
+            <UserManagement></UserManagement>
           </AdminRoute>
         ),
       },
