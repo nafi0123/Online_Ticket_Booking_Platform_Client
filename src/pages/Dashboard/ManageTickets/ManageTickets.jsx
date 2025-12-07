@@ -37,7 +37,7 @@ const ManageTickets = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axiosSecure
-          .patch(`/tickets/${ticket._id}`, { status: "approve" })
+          .patch(`/tickets/${ticket._id}/role`, { status: "approve" })
           .then(() => {
             Swal.fire({
               icon: "success",

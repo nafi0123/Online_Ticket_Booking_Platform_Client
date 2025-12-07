@@ -4,6 +4,7 @@ import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
+import Loading from "../../Loading/Loading";
 
 const AddTicket = () => {
   const { user } = useAuth();
@@ -74,7 +75,7 @@ const AddTicket = () => {
       perks: Object.keys(perks).filter((key) => perks[key]),
       vendorName: user?.displayName || user?.name,
       vendorEmail: user?.email,
-      status: "available",
+      status: "pending",
       createdAt: new Date().toISOString(),
     };
 
@@ -99,39 +100,43 @@ const AddTicket = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-purple-50 to-pink-50 py-12 px-4">
+    <div className="min-h-screen bg-gray-50 dark:bg-[#0f0f11] py-12 px-4">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
+        
+        {/* HEADER */}
         <div className="text-center mb-12">
           <h2 className="text-5xl font-extrabold bg-gradient-to-r from-[#667eea] to-[#764ba2] bg-clip-text text-transparent">
-            Add New <span className="text-[#667eea]">Ticket</span>
+            Add New Ticket
           </h2>
-          <p className="mt-4 text-xl text-gray-600">
-            Create new travel tickets for your customers
+          <p className="mt-4 text-gray-600 dark:text-gray-300 text-lg">
+            Create new travel tickets for your passengers
           </p>
         </div>
 
-        {/* Main Card */}
-        <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
-          <div className="bg-gradient-to-r from-[#667eea] to-[#764ba2] h-3"></div>
+        {/* MAIN CARD */}
+        <div className="bg-white dark:bg-[#151618] rounded-3xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="h-2 bg-gradient-to-r from-[#667eea] to-[#764ba2]"></div>
 
-          <div className="p-8 lg:p-12">
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
-              {/* Ticket Basic Info */}
-              <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-8 rounded-2xl border border-purple-100">
-                <h3 className="text-2xl font-bold text-gray-800 mb-6">
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="p-8 lg:p-12 space-y-10">
+
+              {/* TICKET INFO */}
+              <section className="p-8 rounded-2xl bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-[#1b1c1d] dark:to-[#1b1c1d] border border-purple-200 dark:border-gray-700">
+                <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-6">
                   Ticket Information
                 </h3>
+
                 <div className="grid md:grid-cols-2 gap-8">
+                  {/* Title */}
                   <div>
-                    <label className="block font-semibold text-gray-700 mb-3">
+                    <label className="font-semibold mb-2 block text-gray-700 dark:text-gray-300">
                       Ticket Title
                     </label>
                     <input
                       {...register("title", { required: "Title is required" })}
                       type="text"
                       placeholder="e.g. Dhaka to Cox's Bazar AC Bus"
-                      className="input input-bordered w-full h-14 text-lg"
+                      className="input input-bordered w-full h-14 dark:bg-[#0f0f11] dark:border-gray-700 dark:text-gray-100"
                     />
                     {errors.title && (
                       <p className="text-red-500 text-sm mt-2">
@@ -140,13 +145,14 @@ const AddTicket = () => {
                     )}
                   </div>
 
+                  {/* Type */}
                   <div>
-                    <label className="block font-semibold text-gray-700 mb-3">
+                    <label className="font-semibold mb-2 block text-gray-700 dark:text-gray-300">
                       Transport Type
                     </label>
                     <select
                       {...register("type", { required: "Please select type" })}
-                      className="select select-bordered w-full h-14 text-lg"
+                      className="select select-bordered w-full h-14 dark:bg-[#0f0f11] dark:border-gray-700 dark:text-gray-100"
                     >
                       <option value="">Choose Transport</option>
                       <option>Bus</option>
@@ -162,43 +168,34 @@ const AddTicket = () => {
                   </div>
                 </div>
 
+                {/* From, To, Date */}
                 <div className="grid md:grid-cols-3 gap-8 mt-8">
                   <div>
-                    <label className="block font-semibold text-gray-700 mb-3">
+                    <label className="font-semibold text-gray-700 dark:text-gray-300 mb-2 block">
                       From
                     </label>
                     <input
-                      {...register("from", {
-                        required: "From location required",
-                      })}
+                      {...register("from", { required: "From required" })}
                       type="text"
-                      placeholder="e.g. Dhaka"
-                      className="input input-bordered w-full h-14"
+                      placeholder="Dhaka"
+                      className="input input-bordered w-full h-14 dark:bg-[#0f0f11] dark:border-gray-700 dark:text-gray-100"
                     />
-                    {errors.from && (
-                      <p className="text-red-500 text-sm mt-2">
-                        {errors.from.message}
-                      </p>
-                    )}
                   </div>
+
                   <div>
-                    <label className="block font-semibold text-gray-700 mb-3">
+                    <label className="font-semibold text-gray-700 dark:text-gray-300 mb-2 block">
                       To
                     </label>
                     <input
-                      {...register("to", { required: "To location required" })}
+                      {...register("to", { required: "To required" })}
                       type="text"
-                      placeholder="e.g. Cox's Bazar"
-                      className="input input-bordered w-full h-14"
+                      placeholder="Cox's Bazar"
+                      className="input input-bordered w-full h-14 dark:bg-[#0f0f11] dark:border-gray-700 dark:text-gray-100"
                     />
-                    {errors.to && (
-                      <p className="text-red-500 text-sm mt-2">
-                        {errors.to.message}
-                      </p>
-                    )}
                   </div>
+
                   <div>
-                    <label className="block font-semibold text-gray-700 mb-3">
+                    <label className="font-semibold text-gray-700 dark:text-gray-300 mb-2 block">
                       Departure Date & Time
                     </label>
                     <input
@@ -206,35 +203,27 @@ const AddTicket = () => {
                         required: "Date & time required",
                       })}
                       type="datetime-local"
-                      className="input input-bordered w-full h-14"
+                      className="input input-bordered w-full h-14 dark:bg-[#0f0f11] dark:border-gray-700 dark:text-gray-100"
                     />
-                    {errors.departure && (
-                      <p className="text-red-500 text-sm mt-2">
-                        {errors.departure.message}
-                      </p>
-                    )}
                   </div>
                 </div>
 
+                {/* Price & Quantity */}
                 <div className="grid md:grid-cols-2 gap-8 mt-8">
                   <div>
-                    <label className="block font-semibold text-gray-700 mb-3">
-                      Price per Seat (৳)
+                    <label className="font-semibold text-gray-700 dark:text-gray-300 mb-2 block">
+                      Price (৳)
                     </label>
                     <input
                       {...register("price", { required: "Price required" })}
                       type="number"
                       placeholder="1200"
-                      className="input input-bordered w-full h-14"
+                      className="input input-bordered w-full h-14 dark:bg-[#0f0f11] dark:border-gray-700 dark:text-gray-100"
                     />
-                    {errors.price && (
-                      <p className="text-red-500 text-sm mt-2">
-                        {errors.price.message}
-                      </p>
-                    )}
                   </div>
+
                   <div>
-                    <label className="block font-semibold text-gray-700 mb-3">
+                    <label className="font-semibold text-gray-700 dark:text-gray-300 mb-2 block">
                       Available Seats
                     </label>
                     <input
@@ -245,28 +234,24 @@ const AddTicket = () => {
                       min="1"
                       max="200"
                       placeholder="40"
-                      className="input input-bordered w-full h-14"
+                      className="input input-bordered w-full h-14 dark:bg-[#0f0f11] dark:border-gray-700 dark:text-gray-100"
                     />
-                    {errors.quantity && (
-                      <p className="text-red-500 text-sm mt-2">
-                        {errors.quantity.message}
-                      </p>
-                    )}
                   </div>
                 </div>
-              </div>
+              </section>
 
-              {/* Perks */}
-              <div className="bg-gradient-to-r from-blue-50 to-cyan-50 p-8 rounded-2xl border border-blue-100">
-                <h3 className="text-2xl font-bold text-gray-800 mb-6">
+              {/* PERKS */}
+              <section className="p-8 rounded-2xl bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-[#1c1c1d] dark:to-[#1c1c1d] border border-blue-200 dark:border-gray-700">
+                <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-6">
                   Facilities & Perks
                 </h3>
+
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
                   {["ac", "breakfast", "wifi", "tv", "water", "charging"].map(
                     (perk) => (
                       <label
                         key={perk}
-                        className="flex items-center gap-4 cursor-pointer p-4 bg-white rounded-xl shadow hover:shadow-lg transition"
+                        className="flex items-center gap-3 cursor-pointer p-4 bg-white dark:bg-[#0f0f11] border dark:border-gray-700 rounded-xl shadow-sm"
                       >
                         <input
                           type="checkbox"
@@ -274,78 +259,76 @@ const AddTicket = () => {
                           onChange={(e) =>
                             setPerks({ ...perks, [perk]: e.target.checked })
                           }
-                          className="checkbox checkbox-primary checkbox-lg"
+                          className="checkbox checkbox-primary"
                         />
-                        <span className="font-semibold capitalize">
-                          {perk === "ac" ? "AC" : perk === "tv" ? "TV" : perk}
+                        <span className="font-semibold capitalize text-gray-700 dark:text-gray-300">
+                          {perk === "ac" ? "AC" : perk.toUpperCase()}
                         </span>
                       </label>
                     )
                   )}
                 </div>
-              </div>
+              </section>
 
-              {/* Image Upload */}
-              <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-8 rounded-2xl border border-green-100">
-                <h3 className="text-2xl font-bold text-gray-800 mb-6">
+              {/* IMAGE */}
+              <section className="p-8 rounded-2xl bg-gradient-to-r from-green-50 to-emerald-50 dark:from-[#1b1c1d] dark:to-[#1b1c1d] border border-green-200 dark:border-gray-700">
+                <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-6">
                   Transport Image
                 </h3>
+
                 <div className="flex flex-col items-center">
                   <input
                     type="file"
                     accept="image/*"
                     onChange={handleImageUpload}
-                    className="file-input file-input-bordered file-input-lg w-full max-w-lg"
+                    className="file-input file-input-bordered file-input-lg w-full max-w-lg dark:bg-[#0f0f11] dark:border-gray-700 dark:text-gray-100"
                     required
                   />
-                  {loading && (
-                    <span className="loading loading-spinner loading-lg mt-6"></span>
-                  )}
-                  {image && (
-                    <div className="mt-8">
-                      <img
-                        src={image}
-                        alt="Ticket"
-                        className="w-full max-w-2xl rounded-2xl shadow-2xl"
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>
 
-              {/* Vendor Info */}
-              <div className="bg-gradient-to-r from-gray-100 to-gray-200 p-8 rounded-2xl">
-                <h3 className="text-2xl font-bold text-gray-800 mb-6">
+                  {loading && <Loading />}
+                </div>
+              </section>
+
+              {/* VENDOR INFO */}
+              <section className="p-8 rounded-2xl bg-gray-100 dark:bg-[#131314] border border-gray-200 dark:border-gray-700">
+                <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-6">
                   Vendor Information
                 </h3>
-                <div className="grid md:grid-cols-2 gap-8">
-                  <div className="bg-white p-6 rounded-xl shadow">
-                    <p className="text-sm text-gray-600">Vendor Name</p>
-                    <p className="text-xl font-bold text-gray-800">
+
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="p-6 rounded-xl bg-white dark:bg-[#0f0f11] border dark:border-gray-700 shadow">
+                    <p className="text-gray-500 dark:text-gray-300 text-sm">
+                      Vendor Name
+                    </p>
+                    <p className="text-xl font-bold dark:text-gray-100">
                       {user?.displayName || user?.name}
                     </p>
                   </div>
-                  <div className="bg-white p-6 rounded-xl shadow">
-                    <p className="text-sm text-gray-600">Vendor Email</p>
-                    <p className="text-xl font-bold text-gray-800">
+
+                  <div className="p-6 rounded-xl bg-white dark:bg-[#0f0f11] border dark:border-gray-700 shadow">
+                    <p className="text-gray-500 dark:text-gray-300 text-sm">
+                      Vendor Email
+                    </p>
+                    <p className="text-xl font-bold dark:text-gray-100">
                       {user?.email}
                     </p>
                   </div>
                 </div>
-              </div>
+              </section>
 
-              {/* Submit */}
-              <div className="text-center pt-8">
+              {/* SUBMIT BUTTON */}
+              <div className="text-center">
                 <button
                   type="submit"
                   disabled={loading || !image}
-                  className="btn btn-wide btn-lg text-xl font-bold bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white hover:shadow-2xl hover:scale-105 transition-all duration-300 shadow-xl disabled:opacity-60"
+                  className="btn btn-wide btn-lg text-xl font-bold bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white hover:scale-105 transition-all shadow-xl"
                 >
-                  {loading ? "Uploading Image..." : "Add Ticket Now"}
+                  {loading ? "Uploading Image..." : "Add Ticket"}
                 </button>
               </div>
-            </form>
-          </div>
+            </div>
+          </form>
+
         </div>
       </div>
     </div>

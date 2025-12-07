@@ -13,6 +13,7 @@ import AdminRoute from "./AdminRoute/AdminRoute";
 import VendorRoute from "./VendorRoute/VendorRoute";
 import MyAddedTickets from "../pages/Dashboard/MyAddedTickets/MyAddedTickets";
 
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -65,6 +66,7 @@ export const router = createBrowserRouter([
           </VendorRoute>
         ),
       },
+
       {
         path: "manage-tickets",
 
