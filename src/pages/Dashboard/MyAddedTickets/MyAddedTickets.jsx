@@ -117,7 +117,11 @@ const MyAddedTickets = () => {
     });
   };
 
+  
+
   if (isLoading) return <Loading />;
+
+  console.log(myTickets)
 
   return (
     <div className="p-6 min-h-screen bg-base-200">

@@ -12,7 +12,7 @@ import ManageTickets from "../pages/Dashboard/ManageTickets/ManageTickets.JSX";
 import AdminRoute from "./AdminRoute/AdminRoute";
 import VendorRoute from "./VendorRoute/VendorRoute";
 import MyAddedTickets from "../pages/Dashboard/MyAddedTickets/MyAddedTickets";
-
+import MyProfile from "../pages/Dashboard/MyProfile/MyProfile";
 
 export const router = createBrowserRouter([
   {
@@ -75,6 +75,10 @@ export const router = createBrowserRouter([
             <ManageTickets></ManageTickets>
           </AdminRoute>
         ),
+      },
+      {
+        path: "my-profile",
+        Component: MyProfile,
       },
     ],
   },

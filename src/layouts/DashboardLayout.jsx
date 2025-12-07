@@ -166,7 +166,7 @@ const DashboardLayout = () => {
 
             <li>
               <NavLink
-                to="/dashboard/profile"
+                to="/dashboard/my-profile"
                 className={({ isActive }) =>
                   isActive
                     ? "btn btn-sm w-full justify-start bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white shadow-xl border-none font-bold hover:opacity-95"
