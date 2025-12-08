@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router";
 import RootLayout from "../layouts/RootLayout";
-import Home from "../pages/Home/Home";
+
 import Login from "../pages/Auth/Login/Login";
 import Register from "../pages/Auth/Register/Register";
 import ForgotPass from "../pages/Auth/ForgotPass/ForgotPass";
@@ -16,6 +16,7 @@ import MyProfile from "../pages/Dashboard/MyProfile/MyProfile";
 import AdvertiseTickets from "../pages/Dashboard/AdvertiseTickets/AdvertiseTickets";
 import UserManagement from "../pages/Dashboard/UserManagement/UserManagement";
 import AllTickets from "../pages/Home/AllTickets/AllTickets";
+import HomePage from "../pages/Home/HomePage/HomePage";
 // import UserManagement from "../pages/Dashboard/UserManagement";
 
 export const router = createBrowserRouter([
@@ -26,7 +27,7 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        Component: Home,
+        Component: HomePage,
       },
       {
         path: "/login",
