@@ -14,7 +14,9 @@ import VendorRoute from "./VendorRoute/VendorRoute";
 import MyAddedTickets from "../pages/Dashboard/MyAddedTickets/MyAddedTickets";
 import MyProfile from "../pages/Dashboard/MyProfile/MyProfile";
 import AdvertiseTickets from "../pages/Dashboard/AdvertiseTickets/AdvertiseTickets";
-import UserManagement from "../pages/Dashboard/UserManagement";
+import UserManagement from "../pages/Dashboard/UserManagement/UserManagement";
+import AllTickets from "../pages/Home/AllTickets/AllTickets";
+// import UserManagement from "../pages/Dashboard/UserManagement";
 
 export const router = createBrowserRouter([
   {
@@ -38,8 +40,17 @@ export const router = createBrowserRouter([
         path: "/forgot-password",
         element: <ForgotPass />,
       },
+      {
+        path: "/all-tickets",
+        element: (
+          <PrivateRoute>
+            <AllTickets></AllTickets>
+          </PrivateRoute>
+        ),
+      },
     ],
   },
+
   {
     path: "/dashboard",
     element: (
@@ -78,6 +89,7 @@ export const router = createBrowserRouter([
           </AdminRoute>
         ),
       },
+
       {
         path: "advertise-tickets",
 

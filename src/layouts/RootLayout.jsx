@@ -13,7 +13,7 @@ const RootLayout = () => {
 
   return (
     // bg-[#1b1c1d]
-    <div>
+    <div className="bg-base-200">
       {/* NavBar Wrapper */}
       <div
         className={`
@@ -31,7 +31,7 @@ const RootLayout = () => {
       </div>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto z-1000">
+      <main className="max-w-7xl mx-auto z-1000 ">
         <Outlet />
       </main>
 

@@ -1,13 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
-import Loading from "../Loading/Loading";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import Loading from "../../Loading/Loading";
 import Swal from "sweetalert2";
 
 const UserManagement = () => {
   const axiosSecure = useAxiosSecure();
 
-  // Track theme for SweetAlert
   const [theme, setTheme] = useState("light");
 
   useEffect(() => {
@@ -145,7 +144,7 @@ const UserManagement = () => {
                     <button
                       onClick={() => handleRole(user, "admin")}
                       className="btn btn-sm text-white bg-gradient-to-r from-blue-500 to-blue-700 hover:opacity-90 shadow-md"
-                      disabled={user.role === "admin"}
+                      disabled={user.role === "admin" || user.isFraud}
                     >
                       Make Admin
                     </button>
@@ -154,7 +153,7 @@ const UserManagement = () => {
                     <button
                       onClick={() => handleRole(user, "vendor")}
                       className="btn btn-sm text-white bg-gradient-to-r from-purple-500 to-purple-700 hover:opacity-90 shadow-md"
-                      disabled={user.role === "vendor"}
+                      disabled={user.role === "vendor" || user.isFraud}
                     >
                       Make Vendor
                     </button>
@@ -163,9 +162,16 @@ const UserManagement = () => {
                     {user.role === "vendor" && (
                       <button
                         onClick={() => handleFraud(user)}
-                        className="btn btn-sm text-white bg-red-500 hover:bg-red-600 shadow-md"
+                        disabled={user.isFraud === true}
+                        className={`btn btn-sm text-white shadow-md
+      ${
+        user.isFraud
+          ? "bg-gray-400 cursor-not-allowed" // fraud marked style
+          : "bg-red-500 hover:bg-red-600" // normal mark fraud button
+      }
+    `}
                       >
-                        Mark as Fraud
+                        {user.isFraud ? "Fraud Marked" : "Mark as Fraud"}
                       </button>
                     )}
                   </td>

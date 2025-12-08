@@ -38,7 +38,7 @@ const NavBar = () => {
         <>
           <li>
             <NavLink
-              to="/tickets"
+              to="/all-tickets"
               className="font-semibold hover:text-[#667eea]"
               onClick={() => setMobileMenuOpen(false)}
             >
