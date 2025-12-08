@@ -23,6 +23,8 @@ const AllTickets = () => {
     },
   });
 
+  
+
   if (isLoading) return <Loading />;
 
   return (
