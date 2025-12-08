@@ -26,16 +26,16 @@ const UserManagement = () => {
     },
   });
 
-  // --------------------- ROLE CHANGE ---------------------
+  // ------------------ ROLE UPDATE ------------------
   const handleRole = async (user, role) => {
     Swal.fire({
-      title: `Are you sure?`,
-      text: `Do you really want to make ${user.displayName} an ${role}?`,
-      icon: "warning",
+      title: `Change Role?`,
+      text: `Make ${user.displayName} a ${role}?`,
+      icon: "question",
       showCancelButton: true,
       confirmButtonColor: "#4f46e5",
       cancelButtonColor: "#6b7280",
-      confirmButtonText: "Yes, update",
+      confirmButtonText: "Yes, Update",
       background: theme === "dark" ? "#1f2937" : "#ffffff",
       color: theme === "dark" ? "#f3f4f6" : "#1f2937",
     }).then(async (result) => {
@@ -45,37 +45,34 @@ const UserManagement = () => {
 
           if (res.data.modifiedCount > 0) {
             Swal.fire({
-              title: "Updated!",
+              title: "Success!",
               text: `${user.displayName} is now ${role}.`,
               icon: "success",
-              background: theme === "dark" ? "#1f2937" : "#ffffff",
-              color: theme === "dark" ? "#f3f4f6" : "#1f2937",
+              timer: 1200,
+              showConfirmButton: false,
             });
             refetch();
           }
-        } catch (error) {
+        } catch (err) {
           Swal.fire({
-            title: "Error!",
-            text: "Failed to update role.",
             icon: "error",
-            background: theme === "dark" ? "#1f2937" : "#ffffff",
-            color: theme === "dark" ? "#f3f4f6" : "#1f2937",
+            title: "Failed to Update Role",
           });
         }
       }
     });
   };
 
-  // --------------------- MARK AS FRAUD ---------------------
+  // ------------------ MARK AS FRAUD ------------------
   const handleFraud = async (user) => {
     Swal.fire({
       title: "Mark as Fraud?",
-      text: `This will restrict ${user.displayName} permanently.`,
+      text: `This will permanently restrict ${user.displayName}.`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#dc2626",
       cancelButtonColor: "#6b7280",
-      confirmButtonText: "Yes, mark fraud",
+      confirmButtonText: "Confirm",
       background: theme === "dark" ? "#1f2937" : "#ffffff",
       color: theme === "dark" ? "#f3f4f6" : "#1f2937",
     }).then(async (result) => {
@@ -87,21 +84,18 @@ const UserManagement = () => {
 
           if (res.data.modifiedCount > 0) {
             Swal.fire({
-              title: "Marked as Fraud!",
-              text: `${user.displayName} is now flagged.`,
+              title: "Flagged!",
+              text: `${user.displayName} is now fraud flagged.`,
               icon: "success",
-              background: theme === "dark" ? "#1f2937" : "#ffffff",
-              color: theme === "dark" ? "#f3f4f6" : "#1f2937",
+              timer: 1200,
+              showConfirmButton: false,
             });
             refetch();
           }
-        } catch (error) {
+        } catch (err) {
           Swal.fire({
-            title: "Error!",
-            text: "Failed to apply fraud status.",
             icon: "error",
-            background: theme === "dark" ? "#1f2937" : "#ffffff",
-            color: theme === "dark" ? "#f3f4f6" : "#1f2937",
+            title: "Failed To Mark Fraud",
           });
         }
       }
@@ -116,71 +110,94 @@ const UserManagement = () => {
         User Management
       </h2>
 
-      {users.length === 0 ? (
-        <div className="text-center py-20 text-2xl text-base-content/50">
-          No users found.
-        </div>
-      ) : (
-        <div className="overflow-x-auto w-full">
-          <table className="table table-zebra w-full">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {users.map((user) => (
-                <tr key={user._id}>
-                  <td>{user.displayName}</td>
-                  <td>{user.email}</td>
-                  <td className="capitalize">{user.role}</td>
-
-                  <td className="flex gap-3 flex-wrap">
-                    {/* Make Admin */}
-                    <button
-                      onClick={() => handleRole(user, "admin")}
-                      className="btn btn-sm text-white bg-gradient-to-r from-blue-500 to-blue-700 hover:opacity-90 shadow-md"
-                      disabled={user.role === "admin" || user.isFraud}
-                    >
-                      Make Admin
-                    </button>
-
-                    {/* Make Vendor */}
-                    <button
-                      onClick={() => handleRole(user, "vendor")}
-                      className="btn btn-sm text-white bg-gradient-to-r from-purple-500 to-purple-700 hover:opacity-90 shadow-md"
-                      disabled={user.role === "vendor" || user.isFraud}
-                    >
-                      Make Vendor
-                    </button>
-
-                    {/* Mark as Fraud */}
-                    {user.role === "vendor" && (
-                      <button
-                        onClick={() => handleFraud(user)}
-                        disabled={user.isFraud === true}
-                        className={`btn btn-sm text-white shadow-md
-      ${
-        user.isFraud
-          ? "bg-gray-400 cursor-not-allowed" // fraud marked style
-          : "bg-red-500 hover:bg-red-600" // normal mark fraud button
-      }
-    `}
-                      >
-                        {user.isFraud ? "Fraud Marked" : "Mark as Fraud"}
-                      </button>
-                    )}
-                  </td>
+      <div className="card bg-base-100 shadow-2xl border border-base-300">
+        <div className="card-body p-0">
+          <div className="overflow-x-auto">
+            <table className="table table-zebra w-full">
+              {/* Header */}
+              <thead className="bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white text-lg">
+                <tr>
+                  <th className="p-4">User</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th className="text-center">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+
+              {/* Body */}
+              <tbody>
+                {users.map((user) => (
+                  <tr key={user._id} className="hover:bg-base-200 transition">
+
+                    {/* User Name */}
+                    <td className="font-semibold text-base-content">
+                      {user.displayName}
+                    </td>
+
+                    {/* Email */}
+                    <td className="text-base-content/80">{user.email}</td>
+
+                    {/* Role Badge */}
+                    <td>
+                      <span
+                        className={`badge badge-lg px-4 py-2 text-white ${
+                          user.role === "admin"
+                            ? "bg-gradient-to-r from-red-500 to-red-700"
+                            : user.role === "vendor"
+                            ? "bg-gradient-to-r from-purple-500 to-purple-700"
+                            : "bg-gradient-to-r from-blue-500 to-blue-700"
+                        }`}
+                      >
+                        {user.role}
+                      </span>
+                    </td>
+
+                    {/* Actions */}
+                    <td>
+                      <div className="flex flex-wrap gap-3 justify-center">
+
+                        {/* Make Admin */}
+                        <button
+                          onClick={() => handleRole(user, "admin")}
+                          className="btn btn-sm text-white bg-gradient-to-r from-blue-500 to-blue-700 hover:opacity-90 shadow-md"
+                          disabled={user.role === "admin" || user.isFraud}
+                        >
+                          Make Admin
+                        </button>
+
+                        {/* Make Vendor */}
+                        <button
+                          onClick={() => handleRole(user, "vendor")}
+                          className="btn btn-sm text-white bg-gradient-to-r from-purple-500 to-purple-700 hover:opacity-90 shadow-md"
+                          disabled={user.role === "vendor" || user.isFraud}
+                        >
+                          Make Vendor
+                        </button>
+
+                        {/* Fraud Button */}
+                        {user.role === "vendor" && (
+                          <button
+                            onClick={() => handleFraud(user)}
+                            disabled={user.isFraud}
+                            className={`btn btn-sm text-white shadow-md ${
+                              user.isFraud
+                                ? "bg-gray-400 cursor-not-allowed"
+                                : "bg-gradient-to-r from-red-500 to-red-700 hover:opacity-90"
+                            }`}
+                          >
+                            {user.isFraud ? "Fraud Marked" : "Mark as Fraud"}
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+
+            </table>
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };
