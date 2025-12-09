@@ -20,7 +20,8 @@ import HomePage from "../pages/Home/HomePage/HomePage";
 import ViewDetailsCard from "../pages/Home/ViewdetailsCard/ViewdetailsCard";
 import Loading from "../pages/Loading/Loading";
 import RequestedBookings from "../pages/Dashboard/RequestedBookings/RequestedBookings";
-// import UserManagement from "../pages/Dashboard/UserManagement";
+import MyBookedTickets from "../pages/Dashboard/MyBookedTickets/MyBookedTickets";
+
 
 export const router = createBrowserRouter([
   {
@@ -55,16 +56,14 @@ export const router = createBrowserRouter([
       {
         path: "/ticket-details/:id",
         loader: ({ params }) =>
-          fetch(
-            `http://localhost:5000/tickets-details-card/${params.id}`
-          ),
-        element:(
+          fetch(`http://localhost:5000/tickets-details-card/${params.id}`),
+        element: (
           <PrivateRoute>
             <ViewDetailsCard></ViewDetailsCard>
           </PrivateRoute>
         ),
         hydrateFallbackElement: <Loading></Loading>,
-      }
+      },
     ],
   },
 
@@ -100,9 +99,13 @@ export const router = createBrowserRouter([
         path: "requested-bookings",
         element: (
           <VendorRoute>
-           <RequestedBookings></RequestedBookings>
+            <RequestedBookings></RequestedBookings>
           </VendorRoute>
         ),
+      },
+      {
+        path: "my-bookings",
+        element: <MyBookedTickets></MyBookedTickets>,
       },
 
       {
