@@ -5,14 +5,16 @@ import { useNavigate } from "react-router-dom";
 import useAxios from "../../../hooks/useAxios";
 import { Link } from "react-router";
 
-const LatestTickets = () => {
+const AdvertiseTicketsCard = () => {
   const axiosPublic = useAxios();
   const navigate = useNavigate();
 
-  const { data: latestTickets = [], isLoading } = useQuery({
-    queryKey: ["latest-tickets"],
+  const { data: advertiseTicketsCard = [], isLoading } = useQuery({
+    queryKey: ["advertise-tickets"],
     queryFn: async () => {
-      const res = await axiosPublic.get("/all-tickets/latest-tickets");
+      const res = await axiosPublic.get(
+        "/all-tickets/advertise-tickets/home-page"
+      );
       return res.data;
     },
   });
@@ -24,16 +26,16 @@ const LatestTickets = () => {
       {/* Header + Title */}
       <header className="mb-8 text-center">
         <h1 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-[#667eea] to-[#764ba2] bg-clip-text text-transparent">
-          Latest Tickets
+          Featured Tickets
         </h1>
         <p className="text-base-content/70 mt-2">
-          Check out the most recent tickets added by our vendors
+          Explore tickets currently promoted by our admins
         </p>
       </header>
 
       {/* Tickets Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {latestTickets.map((ticket) => (
+        {advertiseTicketsCard.map((ticket) => (
           <div
             key={ticket._id}
             className="card bg-base-100 shadow-2xl border border-base-300 overflow-hidden"
@@ -55,7 +57,8 @@ const LatestTickets = () => {
                 Type: <span className="font-semibold">{ticket.type}</span>
               </p>
               <p>
-                Price: <span className="font-bold text-xl">৳{ticket.price}</span>
+                Price:{" "}
+                <span className="font-bold text-xl">৳{ticket.price}</span>
               </p>
               <p>Seats: {ticket.quantity}</p>
 
@@ -93,4 +96,4 @@ const LatestTickets = () => {
   );
 };
 
-export default LatestTickets;
+export default AdvertiseTicketsCard;

@@ -17,6 +17,9 @@ import AdvertiseTickets from "../pages/Dashboard/AdvertiseTickets/AdvertiseTicke
 import UserManagement from "../pages/Dashboard/UserManagement/UserManagement";
 import AllTickets from "../pages/Home/AllTickets/AllTickets";
 import HomePage from "../pages/Home/HomePage/HomePage";
+import ViewDetailsCard from "../pages/Home/ViewdetailsCard/ViewdetailsCard";
+import Loading from "../pages/Loading/Loading";
+import RequestedBookings from "../pages/Dashboard/RequestedBookings/RequestedBookings";
 // import UserManagement from "../pages/Dashboard/UserManagement";
 
 export const router = createBrowserRouter([
@@ -49,6 +52,19 @@ export const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
+      {
+        path: "/ticket-details/:id",
+        loader: ({ params }) =>
+          fetch(
+            `http://localhost:5000/tickets-details-card/${params.id}`
+          ),
+        element:(
+          <PrivateRoute>
+            <ViewDetailsCard></ViewDetailsCard>
+          </PrivateRoute>
+        ),
+        hydrateFallbackElement: <Loading></Loading>,
+      }
     ],
   },
 
@@ -77,6 +93,14 @@ export const router = createBrowserRouter([
         element: (
           <VendorRoute>
             <MyAddedTickets></MyAddedTickets>
+          </VendorRoute>
+        ),
+      },
+      {
+        path: "requested-bookings",
+        element: (
+          <VendorRoute>
+           <RequestedBookings></RequestedBookings>
           </VendorRoute>
         ),
       },

@@ -145,6 +145,23 @@ const DashboardLayout = () => {
                     My Added Tickets
                   </NavLink>
                 </li>
+
+
+
+                <li>
+                  <NavLink
+                    to="/dashboard/requested-bookings"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "btn btn-sm w-full justify-start bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white shadow-xl border-none font-bold hover:opacity-95"
+                        : "btn btn-ghost btn-sm w-full justify-start text-base-content hover:bg-base-200"
+                    }
+                  >
+                    Requested Bookings
+                  </NavLink>
+                </li>
+
+
               </>
             )}
 
