@@ -46,6 +46,41 @@ const MyBookedTickets = () => {
     return () => clearInterval(timer);
   }, [bookings]);
 
+  const handlePayment = async (ticket) => {
+    const paymentInfo = {
+      title: ticket.title,
+      image: ticket.image,
+      ticketId: ticket.ticketId, // vendor ticket _id
+      buyerTicketId: ticket._id, // buyer ticket _id — important!
+      buyerName: ticket.buyerName,
+      quantity: ticket.quantity,
+      status: ticket.status,
+      email: ticket.email,
+      vendor_email: ticket.vendor_email,
+      price: ticket.price,
+      from: ticket.from,
+      to: ticket.to,
+      departure: ticket.departure,
+      createdAt: ticket.createdAt,
+      trackId: ticket.trackId,
+    };
+
+    console.log("PAYMENT INFO", paymentInfo);
+
+    try {
+      const res = await axiosSecure.post(
+        "/payment-checkout-session",
+        paymentInfo
+      );
+      window.location.assign(res.data.url);
+    } catch (error) {
+      console.error(
+        "Payment checkout failed:",
+        error.response?.data || error.message
+      );
+    }
+  };
+
   if (isLoading) return <Loading />;
 
   return (
@@ -89,8 +124,7 @@ const MyBookedTickets = () => {
                   <p className="font-medium">Quantity: {ticket.quantity}</p>
 
                   <p className="font-bold text-xl">
-                    Total Price: ৳
-                    {ticket.price * ticket.quantity}
+                    Total Price: ৳{ticket.price * ticket.quantity}
                   </p>
 
                   {/* Departure */}
@@ -119,7 +153,7 @@ const MyBookedTickets = () => {
                   </div>
 
                   {/* COUNTDOWN — shown only if NOT rejected */}
-                  {ticket.status !== "Rejected" && (
+                  {ticket.status !== "Rejected" && ticket.status !== "paid" && (
                     <p className="mt-2 font-bold text-blue-600">
                       Countdown:{" "}
                       {countdowns[ticket._id] === "Expired"
@@ -131,7 +165,10 @@ const MyBookedTickets = () => {
                   {/* PAY NOW button */}
                   {ticket.status === "Accepted" &&
                     countdowns[ticket._id] !== "Expired" && (
-                      <button className="btn bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white w-full mt-4">
+                      <button
+                        onClick={() => handlePayment(ticket)}
+                        className="btn bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white w-full mt-4"
+                      >
                         Pay Now
                       </button>
                     )}

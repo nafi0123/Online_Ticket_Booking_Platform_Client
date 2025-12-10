@@ -21,7 +21,8 @@ import ViewDetailsCard from "../pages/Home/ViewdetailsCard/ViewdetailsCard";
 import Loading from "../pages/Loading/Loading";
 import RequestedBookings from "../pages/Dashboard/RequestedBookings/RequestedBookings";
 import MyBookedTickets from "../pages/Dashboard/MyBookedTickets/MyBookedTickets";
-
+import PaymentSuccess from "../pages/Dashboard/Payment/PaymentSuccess/PaymentSuccess";
+import PaymentCancelled from "../pages/Dashboard/Payment/PaymentCancelled/PaymentCancelled";
 
 export const router = createBrowserRouter([
   {
@@ -139,6 +140,14 @@ export const router = createBrowserRouter([
       {
         path: "my-profile",
         Component: MyProfile,
+      },
+      {
+        path: "payment-success",
+        Component: PaymentSuccess,
+      },
+       {
+        path: "payment-cancelled",
+        Component: PaymentCancelled,
       },
     ],
   },
