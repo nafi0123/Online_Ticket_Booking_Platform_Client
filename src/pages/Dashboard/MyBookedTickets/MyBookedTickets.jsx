@@ -86,7 +86,7 @@ const MyBookedTickets = () => {
   return (
     <div className="min-h-screen py-10 px-4">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-4xl font-bold text-center mb-8">
+        <h2 className="text-4xl font-extrabold text-center mb-10 bg-gradient-to-r from-[#667eea] to-[#764ba2] bg-clip-text text-transparent">
           Your Booked Tickets
         </h2>
 
@@ -144,7 +144,7 @@ const MyBookedTickets = () => {
                           : ticket.status === "Rejected"
                           ? "badge-error"
                           : ticket.status === "paid"
-                          ? "badge-primary"
+                          ? "badge-success"
                           : "badge-warning"
                       }`}
                     >

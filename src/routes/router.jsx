@@ -23,6 +23,8 @@ import RequestedBookings from "../pages/Dashboard/RequestedBookings/RequestedBoo
 import MyBookedTickets from "../pages/Dashboard/MyBookedTickets/MyBookedTickets";
 import PaymentSuccess from "../pages/Dashboard/Payment/PaymentSuccess/PaymentSuccess";
 import PaymentCancelled from "../pages/Dashboard/Payment/PaymentCancelled/PaymentCancelled";
+import PaymentHistory from "../pages/Dashboard/PaymentHistory/PaymentHistory";
+import RevenueOverview from "../pages/Dashboard/RevenueOverview/RevenueOverview";
 
 export const router = createBrowserRouter([
   {
@@ -145,9 +147,22 @@ export const router = createBrowserRouter([
         path: "payment-success",
         Component: PaymentSuccess,
       },
-       {
+      {
         path: "payment-cancelled",
         Component: PaymentCancelled,
+      },
+
+      {
+        path: "payment-history",
+        Component: PaymentHistory,
+      },
+      {
+        path: "revenue-overview",
+        element: (
+          <VendorRoute>
+            <RevenueOverview></RevenueOverview>
+          </VendorRoute>
+        ),
       },
     ],
   },

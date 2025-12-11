@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../pages/Shared/NavBar/NavBar";
-import { Outlet } from "react-router";
+import { Outlet, useNavigation } from "react-router";
 import Footer from "../pages/Shared/Footer/Footer";
 
 const RootLayout = () => {
   const [theme, setTheme] = useState("light");
+  const { state } = useNavigation;
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "light";
@@ -32,7 +33,7 @@ const RootLayout = () => {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto z-1000 ">
-        <Outlet />
+         {state == "loading" ? <Loading></Loading> : <Outlet></Outlet>}
       </main>
 
       <div className="max-w-7xl mx-auto">

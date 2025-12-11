@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import useRole from "../hooks/useRole";
+import { useNavigation } from "react-router";
 
 const DashboardLayout = () => {
   const { role } = useRole();
+  const { state } = useNavigation;
 
   // 👉 Theme Load + Apply From LocalStorage
   useEffect(() => {
@@ -17,7 +19,6 @@ const DashboardLayout = () => {
 
       {/* Main Content */}
       <div className="drawer-content flex flex-col">
-
         {/* Top Navbar */}
         <div className="navbar bg-base-100 shadow-lg border-b border-base-300 sticky top-0 z-50">
           <div className="flex-none lg:hidden">
@@ -59,7 +60,7 @@ const DashboardLayout = () => {
 
         {/* Page Content */}
         <div className="flex-1 bg-base-200 p-6 md:p-10 min-h-screen">
-          <Outlet />
+          {state == "loading" ? <Loading></Loading> : <Outlet></Outlet>}
         </div>
       </div>
 
@@ -70,8 +71,12 @@ const DashboardLayout = () => {
         <aside className="w-72 min-h-full bg-base-100 border-r border-base-300 flex flex-col shadow-2xl">
           {/* Sidebar Header */}
           <div className="p-6 bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white">
-            <h2 className="text-2xl font-extrabold tracking-tight">My Dashboard</h2>
-            <p className="text-sm opacity-90 mt-1">Manage everything in one place</p>
+            <h2 className="text-2xl font-extrabold tracking-tight">
+              My Dashboard
+            </h2>
+            <p className="text-sm opacity-90 mt-1">
+              Manage everything in one place
+            </p>
           </div>
 
           {/* Menu */}
@@ -146,8 +151,6 @@ const DashboardLayout = () => {
                   </NavLink>
                 </li>
 
-
-
                 <li>
                   <NavLink
                     to="/dashboard/requested-bookings"
@@ -161,7 +164,18 @@ const DashboardLayout = () => {
                   </NavLink>
                 </li>
 
-
+                <li>
+                  <NavLink
+                    to="/dashboard/revenue-overview"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "btn btn-sm w-full justify-start bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white shadow-xl border-none font-bold hover:opacity-95"
+                        : "btn btn-ghost btn-sm w-full justify-start text-base-content hover:bg-base-200"
+                    }
+                  >
+                    Revenue Overview
+                  </NavLink>
+                </li>
               </>
             )}
 

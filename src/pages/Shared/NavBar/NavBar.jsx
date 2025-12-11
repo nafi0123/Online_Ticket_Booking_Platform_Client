@@ -104,7 +104,7 @@ const NavBar = () => {
                   </div>
                 </div>
                 <ul className="menu dropdown-content mt-3 p-3 shadow-2xl bg-base-100 rounded-xl w-56 border">
-                  <li><NavLink to="/profile" className="flex items-center gap-3">My Profile</NavLink></li>
+                  <li><NavLink to="/dashboard/my-profile" className="flex items-center gap-3">My Profile</NavLink></li>
                   <li><button onClick={handleLogOut} className="-600 font-medium bg-red-600 btn-sm text-white mt-2">Logout</button></li>
                 </ul>
               </div>
@@ -155,7 +155,7 @@ const NavBar = () => {
                   </div>
                 </div>
                 <NavLink
-                  to="/profile"
+                  to="/dashboard/my-profile"
                   className="btn btn-outline w-full"
                   onClick={() => setMobileMenuOpen(false)}
                 >
