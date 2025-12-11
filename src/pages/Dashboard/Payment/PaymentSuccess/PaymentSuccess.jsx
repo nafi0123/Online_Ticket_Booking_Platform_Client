@@ -97,7 +97,7 @@ const PaymentSuccess = () => {
         </div>
 
         <a
-          href="/dashboard/my-booked-tickets"
+          href="/dashboard/my-bookings"
           className="btn btn-primary w-full py-3 rounded-lg shadow-md hover:shadow-lg transition-all mt-8"
         >
           View My Tickets

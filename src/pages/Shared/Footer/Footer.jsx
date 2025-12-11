@@ -168,28 +168,28 @@ const Footer = () => {
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 flex items-center justify-center hover:bg-white/20 transition">
                 <img
-                  src="https://i.ibb.co.com/9b5Xh1g/bkash.png"
+                  src="https://i.ibb.co.com/xt2JfgKk/bkash-logo-bkash-logo-with-origami-pink-bird-Ur5y5-Ta5-removebg-preview.png"
                   alt="bKash"
                   className="h-10"
                 />
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 flex items-center justify-center hover:bg-white/20 transition">
                 <img
-                  src="https://i.ibb.co.com/0jD1Z3K/nagad.png"
+                  src="https://i.ibb.co.com/PsCb0c0V/Nagad-Logo-wine-removebg-preview.png"
                   alt="Nagad"
                   className="h-10"
                 />
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 flex items-center justify-center hover:bg-white/20 transition">
                 <img
-                  src="https://i.ibb.co.com/5kL5Y3K/rocket.png"
+                  src="https://i.ibb.co.com/PsCb0c0V/Nagad-Logo-wine-removebg-preview.png"
                   alt="Rocket"
                   className="h-10"
                 />
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 flex items-center justify-center hover:bg-white/20 transition">
                 <img
-                  src="https://i.ibb.co.com/3h5Y3K9/visa-mastercard.png"
+                  src="https://i.ibb.co.com/NgxT6HTJ/strip-removebg-preview.png"
                   alt="Card"
                   className="h-10"
                 />

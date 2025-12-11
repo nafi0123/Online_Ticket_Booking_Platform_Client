@@ -29,7 +29,6 @@ const ManageTickets = () => {
     enabled: !!user?.email,
   });
 
-
   const handleApprove = (ticket) => {
     Swal.fire({
       title: "Approve Ticket?",
@@ -39,7 +38,7 @@ const ManageTickets = () => {
       confirmButtonColor: "#16a34a",
       cancelButtonColor: "#dc2626",
       confirmButtonText: "Yes, approve",
-            background: theme === "dark" ? "#1f2937" : "#ffffff",
+      background: theme === "dark" ? "#1f2937" : "#ffffff",
       color: theme === "dark" ? "#f3f4f6" : "#1f2937",
     }).then((result) => {
       if (result.isConfirmed) {
@@ -68,12 +67,12 @@ const ManageTickets = () => {
       confirmButtonColor: "#dc2626",
       cancelButtonColor: "#6b7280",
       confirmButtonText: "Yes, reject",
-            background: theme === "dark" ? "#1f2937" : "#ffffff",
+      background: theme === "dark" ? "#1f2937" : "#ffffff",
       color: theme === "dark" ? "#f3f4f6" : "#1f2937",
     }).then((result) => {
       if (result.isConfirmed) {
         axiosSecure
-          .patch(`/tickets/${ticket._id}`, { status: "reject" })
+          .patch(`/tickets/${ticket._id}/role`, { status: "reject" })
           .then(() => {
             Swal.fire({
               icon: "error",
@@ -94,21 +93,17 @@ const ManageTickets = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-10">
-          <h2 className="text-5xl font-extrabold bg-gradient-to-r from-[#667eea] to-[#764ba2] bg-clip-text text-transparent">
+          <h2 className="text-4xl font-extrabold text-center mb-10 bg-gradient-to-r from-[#667eea] to-[#764ba2] bg-clip-text text-transparent">
             Manage Tickets
           </h2>
           <p className="mt-4 text-xl text-base-content/70">
             Review and approve vendor-submitted tickets
           </p>
-          <div className="mt-4 inline-block px-6 py-3 bg-yellow-500/20 text-yellow-600 dark:text-yellow-400 rounded-full font-bold text-lg border border-yellow-500/50">
-            {tickets.length} Pending
-          </div>
         </div>
 
         {/* No Tickets */}
         {tickets.length === 0 ? (
           <div className="text-center py-32">
-
             <p className="text-3xl text-base-content/60">
               No pending tickets to review
             </p>
@@ -133,7 +128,10 @@ const ManageTickets = () => {
 
                   <tbody>
                     {tickets.map((ticket) => (
-                      <tr key={ticket._id} className="hover:bg-base-200 transition">
+                      <tr
+                        key={ticket._id}
+                        className="hover:bg-base-200 transition"
+                      >
                         <td className="p-4">
                           <img
                             src={ticket.image}
@@ -152,7 +150,9 @@ const ManageTickets = () => {
                         </td>
 
                         <td>
-                          <span className="badge badge-lg badge-primary">{ticket.type}</span>
+                          <span className="badge badge-lg badge-primary">
+                            {ticket.type}
+                          </span>
                         </td>
 
                         <td>
@@ -187,7 +187,8 @@ const ManageTickets = () => {
                                   ? "AC"
                                   : perk === "tv"
                                   ? "TV"
-                                  : perk.charAt(0).toUpperCase() + perk.slice(1)}
+                                  : perk.charAt(0).toUpperCase() +
+                                    perk.slice(1)}
                               </span>
                             ))}
                           </div>
@@ -204,7 +205,6 @@ const ManageTickets = () => {
 
                         <td>
                           <div className="flex gap-3 justify-center">
-
                             {/* APPROVE BUTTON */}
                             <button
                               onClick={() => handleApprove(ticket)}
@@ -220,13 +220,11 @@ const ManageTickets = () => {
                             >
                               <FaTimes /> Reject
                             </button>
-
                           </div>
                         </td>
                       </tr>
                     ))}
                   </tbody>
-
                 </table>
               </div>
             </div>

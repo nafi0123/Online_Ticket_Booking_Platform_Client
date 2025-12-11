@@ -24,7 +24,7 @@ import MyBookedTickets from "../pages/Dashboard/MyBookedTickets/MyBookedTickets"
 import PaymentSuccess from "../pages/Dashboard/Payment/PaymentSuccess/PaymentSuccess";
 import PaymentCancelled from "../pages/Dashboard/Payment/PaymentCancelled/PaymentCancelled";
 import PaymentHistory from "../pages/Dashboard/PaymentHistory/PaymentHistory";
-import RevenueOverview from "../pages/Dashboard/RevenueOverview/RevenueOverview";
+import RevenueOverview from "../pages/Dashboard/DashboardHome/RevenueOverview";
 
 export const router = createBrowserRouter([
   {
@@ -74,19 +74,42 @@ export const router = createBrowserRouter([
     path: "/dashboard",
     element: (
       <PrivateRoute>
-        <DashboardLayout></DashboardLayout>
+        <DashboardLayout />
       </PrivateRoute>
     ),
     children: [
+      // 🔹 Default route → My Profile
       {
         index: true,
-        Component: DashboardHome,
+        element: <MyProfile />,
       },
+      {
+        path: "my-profile",
+        element: <MyProfile />,
+      },
+      {
+        path: "my-bookings",
+        element: <MyBookedTickets />,
+      },
+      {
+        path: "payment-history",
+        element: <PaymentHistory />,
+      },
+      {
+        path: "revenue-overview",
+        element: (
+          <VendorRoute>
+            <RevenueOverview />
+          </VendorRoute>
+        ),
+      },
+
+      // Vendor routes
       {
         path: "add-ticket",
         element: (
           <VendorRoute>
-            <AddTicket></AddTicket>
+            <AddTicket />
           </VendorRoute>
         ),
       },
@@ -94,7 +117,7 @@ export const router = createBrowserRouter([
         path: "my-added-tickets",
         element: (
           <VendorRoute>
-            <MyAddedTickets></MyAddedTickets>
+            <MyAddedTickets />
           </VendorRoute>
         ),
       },
@@ -102,67 +125,45 @@ export const router = createBrowserRouter([
         path: "requested-bookings",
         element: (
           <VendorRoute>
-            <RequestedBookings></RequestedBookings>
+            <RequestedBookings />
           </VendorRoute>
         ),
       },
-      {
-        path: "my-bookings",
-        element: <MyBookedTickets></MyBookedTickets>,
-      },
 
+      // Admin routes
       {
         path: "manage-tickets",
-
         element: (
           <AdminRoute>
-            <ManageTickets></ManageTickets>
+            <ManageTickets />
           </AdminRoute>
         ),
       },
-
       {
         path: "advertise-tickets",
-
         element: (
           <AdminRoute>
-            <AdvertiseTickets></AdvertiseTickets>
+            <AdvertiseTickets />
           </AdminRoute>
         ),
       },
       {
         path: "user-management",
-
         element: (
           <AdminRoute>
-            <UserManagement></UserManagement>
+            <UserManagement />
           </AdminRoute>
         ),
       },
-      {
-        path: "my-profile",
-        Component: MyProfile,
-      },
+
+      // Payment routes
       {
         path: "payment-success",
-        Component: PaymentSuccess,
+        element: <PaymentSuccess />,
       },
       {
         path: "payment-cancelled",
-        Component: PaymentCancelled,
-      },
-
-      {
-        path: "payment-history",
-        Component: PaymentHistory,
-      },
-      {
-        path: "revenue-overview",
-        element: (
-          <VendorRoute>
-            <RevenueOverview></RevenueOverview>
-          </VendorRoute>
-        ),
+        element: <PaymentCancelled />,
       },
     ],
   },

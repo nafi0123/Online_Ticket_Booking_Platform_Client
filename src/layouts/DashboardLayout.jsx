@@ -2,10 +2,24 @@ import React, { useEffect } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import useRole from "../hooks/useRole";
 import { useNavigation } from "react-router";
+import {
+  FaUser,
+  FaTicketAlt,
+  FaHistory,
+  FaMoneyBillWave,
+  FaPlus,
+  FaClipboardList,
+  FaHandPaper,
+  FaChartBar,
+  FaCogs,
+  FaUsers,
+} from "react-icons/fa";
+import Loading from "../pages/Loading/Loading";
+// import Loading from "../components/Loading/Loading";
 
 const DashboardLayout = () => {
   const { role } = useRole();
-  const { state } = useNavigation;
+  const { state } = useNavigation();
 
   // 👉 Theme Load + Apply From LocalStorage
   useEffect(() => {
@@ -21,27 +35,6 @@ const DashboardLayout = () => {
       <div className="drawer-content flex flex-col">
         {/* Top Navbar */}
         <div className="navbar bg-base-100 shadow-lg border-b border-base-300 sticky top-0 z-50">
-          <div className="flex-none lg:hidden">
-            <label
-              htmlFor="dashboard-drawer"
-              className="btn btn-square btn-ghost"
-            >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              </svg>
-            </label>
-          </div>
-
           <div className="flex-1 px-4">
             <NavLink to="/" className="flex items-center gap-3">
               <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#667eea] to-[#764ba2] flex items-center justify-center shadow-2xl">
@@ -60,7 +53,7 @@ const DashboardLayout = () => {
 
         {/* Page Content */}
         <div className="flex-1 bg-base-200 p-6 md:p-10 min-h-screen">
-          {state == "loading" ? <Loading></Loading> : <Outlet></Outlet>}
+          {state === "loading" ? <Loading /> : <Outlet />}
         </div>
       </div>
 
@@ -92,7 +85,7 @@ const DashboardLayout = () => {
                     : "btn btn-ghost btn-sm w-full justify-start text-base-content hover:bg-base-200"
                 }
               >
-                Dashboard Home
+                <FaUser /> My Profile
               </NavLink>
             </li>
 
@@ -105,7 +98,7 @@ const DashboardLayout = () => {
                     : "btn btn-ghost btn-sm w-full justify-start text-base-content hover:bg-base-200"
                 }
               >
-                My Bookings
+                <FaTicketAlt /> My Bookings
               </NavLink>
             </li>
 
@@ -118,7 +111,7 @@ const DashboardLayout = () => {
                     : "btn btn-ghost btn-sm w-full justify-start text-base-content hover:bg-base-200"
                 }
               >
-                Payment History
+                <FaHistory /> Payment History
               </NavLink>
             </li>
 
@@ -134,7 +127,7 @@ const DashboardLayout = () => {
                         : "btn btn-ghost btn-sm w-full justify-start text-base-content hover:bg-base-200"
                     }
                   >
-                    Add New Ticket
+                    <FaPlus /> Add New Ticket
                   </NavLink>
                 </li>
 
@@ -147,7 +140,7 @@ const DashboardLayout = () => {
                         : "btn btn-ghost btn-sm w-full justify-start text-base-content hover:bg-base-200"
                     }
                   >
-                    My Added Tickets
+                    <FaClipboardList /> My Added Tickets
                   </NavLink>
                 </li>
 
@@ -160,7 +153,7 @@ const DashboardLayout = () => {
                         : "btn btn-ghost btn-sm w-full justify-start text-base-content hover:bg-base-200"
                     }
                   >
-                    Requested Bookings
+                    <FaHandPaper /> Requested Bookings
                   </NavLink>
                 </li>
 
@@ -173,7 +166,7 @@ const DashboardLayout = () => {
                         : "btn btn-ghost btn-sm w-full justify-start text-base-content hover:bg-base-200"
                     }
                   >
-                    Revenue Overview
+                    <FaMoneyBillWave /> Revenue Overview
                   </NavLink>
                 </li>
               </>
@@ -191,7 +184,7 @@ const DashboardLayout = () => {
                         : "btn btn-ghost btn-sm w-full justify-start text-base-content hover:bg-base-200"
                     }
                   >
-                    Manage Tickets
+                    <FaCogs /> Manage Tickets
                   </NavLink>
                 </li>
 
@@ -204,7 +197,7 @@ const DashboardLayout = () => {
                         : "btn btn-ghost btn-sm w-full justify-start text-base-content hover:bg-base-200"
                     }
                   >
-                    Advertise Tickets
+                    <FaMoneyBillWave /> Advertise Tickets
                   </NavLink>
                 </li>
 
@@ -217,25 +210,11 @@ const DashboardLayout = () => {
                         : "btn btn-ghost btn-sm w-full justify-start text-base-content hover:bg-base-200"
                     }
                   >
-                    User Management
+                    <FaUsers /> User Management
                   </NavLink>
                 </li>
               </>
             )}
-
-            {/* Profile */}
-            <li>
-              <NavLink
-                to="/dashboard/my-profile"
-                className={({ isActive }) =>
-                  isActive
-                    ? "btn btn-sm w-full justify-start bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white shadow-xl border-none font-bold hover:opacity-95"
-                    : "btn btn-ghost btn-sm w-full justify-start text-base-content hover:bg-base-200"
-                }
-              >
-                My Profile
-              </NavLink>
-            </li>
           </ul>
 
           {/* Logout */}
