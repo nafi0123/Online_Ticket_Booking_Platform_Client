@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 // import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { BsCheckCircle } from "react-icons/bs";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
+import Loading from "../../../Loading/Loading";
 
 const PaymentSuccess = () => {
   const [searchParams] = useSearchParams();
@@ -37,9 +38,7 @@ const PaymentSuccess = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-xl">
-        Verifying payment...
-      </div>
+      <Loading></Loading>
     );
   }
 
@@ -75,14 +74,14 @@ const PaymentSuccess = () => {
 
           <hr className="my-4 border-gray-300" />
 
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <span className="block text-gray-500 font-medium">
               Tracking ID
             </span>
             <span className="block text-gray-900 font-semibold break-all text-lg">
-              {paymentInfo.trackingId || "-"}
+              {paymentInfo.ticketId || "-"}
             </span>
-          </div>
+          </div> */}
 
           <hr className="my-4 border-gray-300" />
 
@@ -96,12 +95,7 @@ const PaymentSuccess = () => {
           </div>
         </div>
 
-        <a
-          href="/dashboard/my-bookings"
-          className="btn btn-primary w-full py-3 rounded-lg shadow-md hover:shadow-lg transition-all mt-8"
-        >
-          View My Tickets
-        </a>
+        
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import axios from "axios";
 import React from 'react';
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:5000'
+    baseURL: 'https://online-ticket-booking-platform-serv.vercel.app'
 })
 
 const useAxios = () => {

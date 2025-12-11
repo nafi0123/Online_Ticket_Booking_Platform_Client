@@ -25,12 +25,13 @@ import PaymentSuccess from "../pages/Dashboard/Payment/PaymentSuccess/PaymentSuc
 import PaymentCancelled from "../pages/Dashboard/Payment/PaymentCancelled/PaymentCancelled";
 import PaymentHistory from "../pages/Dashboard/PaymentHistory/PaymentHistory";
 import RevenueOverview from "../pages/Dashboard/DashboardHome/RevenueOverview";
+import ErrorPage from "../pages/ErrorPage/ErrorPage";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     Component: RootLayout,
-    // errorElement: <ErrorElement></ErrorElement>,
+    errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         index: true,
@@ -59,7 +60,9 @@ export const router = createBrowserRouter([
       {
         path: "/ticket-details/:id",
         loader: ({ params }) =>
-          fetch(`http://localhost:5000/tickets-details-card/${params.id}`),
+          fetch(
+            `https://online-ticket-booking-platform-serv.vercel.app/tickets-details-card/${params.id}`
+          ),
         element: (
           <PrivateRoute>
             <ViewDetailsCard></ViewDetailsCard>
@@ -72,11 +75,13 @@ export const router = createBrowserRouter([
 
   {
     path: "/dashboard",
+
     element: (
       <PrivateRoute>
         <DashboardLayout />
       </PrivateRoute>
     ),
+    errorElement: <ErrorPage></ErrorPage>,
     children: [
       // 🔹 Default route → My Profile
       {

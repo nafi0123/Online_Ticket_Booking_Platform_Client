@@ -10,12 +10,10 @@ import {
   FaPlus,
   FaClipboardList,
   FaHandPaper,
-  FaChartBar,
   FaCogs,
   FaUsers,
 } from "react-icons/fa";
 import Loading from "../pages/Loading/Loading";
-// import Loading from "../components/Loading/Loading";
 
 const DashboardLayout = () => {
   const { role } = useRole();
@@ -33,21 +31,49 @@ const DashboardLayout = () => {
 
       {/* Main Content */}
       <div className="drawer-content flex flex-col">
-        {/* Top Navbar */}
+        {/* Top Navbar - Fixed at z-50 */}
         <div className="navbar bg-base-100 shadow-lg border-b border-base-300 sticky top-0 z-50">
-          <div className="flex-1 px-4">
-            <NavLink to="/" className="flex items-center gap-3">
+          
+          {/* Navbar Left Side (Toggle Button and Logo) */}
+          <div className="flex-1 px-4 flex items-center">
+            {/* Mobile Drawer Toggle Button */}
+            <label
+              htmlFor="dashboard-drawer"
+              className="btn btn-ghost lg:hidden"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4 6h16M4 12h8m-8 6h16"
+                />
+              </svg>
+            </label>
+
+            {/* TB Logo with spacing */}
+            <NavLink to="/" className="flex items-center gap-3 ml-2">
               <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#667eea] to-[#764ba2] flex items-center justify-center shadow-2xl">
                 <span className="text-white font-black text-2xl">TB</span>
               </div>
+
               <span className="text-3xl font-extrabold bg-gradient-to-r from-[#667eea] to-[#764ba2] bg-clip-text text-transparent hidden sm:block">
                 TicketBari
               </span>
             </NavLink>
           </div>
 
+          {/* Navbar Right Side */}
           <div className="flex-none">
-            <div className="text-lg font-bold text-base-content">Dashboard</div>
+            <div className="text-lg font-bold text-base-content hidden sm:block mr-4">
+              Dashboard
+            </div>
           </div>
         </div>
 
@@ -57,13 +83,15 @@ const DashboardLayout = () => {
         </div>
       </div>
 
-      {/* Sidebar */}
-      <div className="drawer-side">
+      {/* Sidebar - Increased z-index for better visibility */}
+      {/* 🔴 FIX: Added z-50 to drawer-side */}
+      <div className="drawer-side z-50">
         <label htmlFor="dashboard-drawer" className="drawer-overlay"></label>
 
-        <aside className="w-72 min-h-full bg-base-100 border-r border-base-300 flex flex-col shadow-2xl">
+        {/* 🔴 FIX: Increased z-index of aside element to match/exceed navbar */}
+        <aside className="w-72 min-h-full bg-base-100 border-r border-base-300 flex flex-col shadow-2xl z-50">
           {/* Sidebar Header */}
-          <div className="p-6 bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white">
+          <div className="p-6 bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white ">
             <h2 className="text-2xl font-extrabold tracking-tight">
               My Dashboard
             </h2>
@@ -216,13 +244,6 @@ const DashboardLayout = () => {
               </>
             )}
           </ul>
-
-          {/* Logout */}
-          <div className="p-4 border-t border-base-300">
-            <button className="btn btn-outline btn-error btn-sm w-full font-bold">
-              Logout
-            </button>
-          </div>
         </aside>
       </div>
     </div>
