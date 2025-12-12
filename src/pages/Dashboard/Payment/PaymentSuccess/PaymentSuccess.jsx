@@ -40,13 +40,7 @@ const PaymentSuccess = () => {
   }
 
   return (
-    <div
-      className="
-        min-h-screen flex items-center justify-center p-6 
-        bg-gradient-to-b from-[#f0f4f8] to-white 
-        dark:bg-gradient-to-b dark:from-[#0f172a] dark:to-[#1e293b]
-      "
-    >
+    <div className="min-h-screen flex items-center justify-center p-6 bg-base-200">
       <div
         className="
           bg-white dark:bg-[#1e293b]
@@ -57,7 +51,8 @@ const PaymentSuccess = () => {
         {/* Success Icon */}
         <BsCheckCircle className="text-7xl text-primary mx-auto mb-6 animate-bounce" />
 
-        <h2 className="text-3xl font-bold text-secondary dark:text-white mb-4">
+        {/* Heading */}
+        <h2 className="text-3xl font-bold text-secondary dark:text-primary mb-4">
           Payment Successful
         </h2>
 
@@ -65,17 +60,18 @@ const PaymentSuccess = () => {
           Your payment has been processed successfully.
         </p>
 
-        {/* Receipt Box */}
+        {/* Receipt Card */}
         <div
           className="
-            bg-gray-50 dark:bg-[#0f172a] 
-            p-6 rounded-xl border 
-            border-gray-200 dark:border-gray-600 
+            bg-gray-50 dark:bg-slate-800 
+            p-6 rounded-xl 
+            border border-gray-200 dark:border-gray-600 
             shadow-sm text-left
           "
         >
+          {/* Transaction ID */}
           <div className="mb-4">
-            <span className="block text-gray-500 dark:text-gray-400 font-medium">
+            <span className="block text-gray-500 dark:text-gray-300 font-medium">
               Transaction ID
             </span>
             <span className="block text-gray-900 dark:text-gray-100 font-semibold break-all text-lg">
@@ -83,18 +79,41 @@ const PaymentSuccess = () => {
             </span>
           </div>
 
-          <hr className="my-4 border-gray-300 dark:border-gray-700" />
+          {/* <hr className="my-4 border-gray-300 dark:border-gray-700" /> */}
+
+          {/* Tracking ID
+          <div className="mb-4">
+            <span className="block text-gray-500 dark:text-gray-300 font-medium">
+              Tracking ID
+            </span>
+            <span className="block text-gray-900 dark:text-gray-100 font-semibold break-all text-lg">
+              {paymentInfo.trackingId || "-"}
+            </span>
+          </div> */}
 
           <hr className="my-4 border-gray-300 dark:border-gray-700" />
 
-          <div>
-            <span className="block text-gray-500 dark:text-gray-400 font-medium">
+          {/* Route */}
+          <div className="mb-2">
+            <span className="block text-gray-500 dark:text-gray-300 font-medium">
               Route
             </span>
             <span className="block text-gray-900 dark:text-gray-100 font-semibold break-all text-lg">
               {paymentInfo.from} → {paymentInfo.to}
             </span>
           </div>
+
+          {/* Title / Ticket Info */}
+          {paymentInfo.title && (
+            <div className="mt-4">
+              <span className="block text-gray-500 dark:text-gray-300 font-medium">
+                Ticket
+              </span>
+              <span className="block text-gray-900 dark:text-gray-100 font-semibold break-all text-lg">
+                {paymentInfo.title}
+              </span>
+            </div>
+          )}
         </div>
       </div>
     </div>
