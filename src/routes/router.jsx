@@ -86,7 +86,7 @@ export const router = createBrowserRouter([
       // 🔹 Default route → My Profile
       {
         index: true,
-        element: <MyProfile />,
+        element: <DashboardHome></DashboardHome>,
       },
       {
         path: "my-profile",

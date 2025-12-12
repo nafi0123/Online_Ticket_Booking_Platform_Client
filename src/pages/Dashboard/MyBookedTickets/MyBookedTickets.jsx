@@ -50,8 +50,8 @@ const MyBookedTickets = () => {
     const paymentInfo = {
       title: ticket.title,
       image: ticket.image,
-      ticketId: ticket.ticketId, // vendor ticket _id
-      buyerTicketId: ticket._id, // buyer ticket _id — important!
+      ticketId: ticket.ticketId,
+      buyerTicketId: ticket._id,
       buyerName: ticket.buyerName,
       quantity: ticket.quantity,
       status: ticket.status,
@@ -82,12 +82,13 @@ const MyBookedTickets = () => {
   };
 
   if (isLoading) return <Loading />;
+  console.log(bookings);
 
   return (
     <div className="min-h-screen py-10 px-4">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-4xl font-extrabold text-center mb-10 bg-gradient-to-r from-[#667eea] to-[#764ba2] bg-clip-text text-transparent">
-          Your Booked Tickets
+          My Booked Tickets
         </h2>
 
         {bookings.length === 0 ? (

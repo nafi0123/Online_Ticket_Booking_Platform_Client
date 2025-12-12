@@ -26,7 +26,9 @@ const PaymentHistory = () => {
   if (paymentHistory.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-64 text-xl font-semibold text-base-content/70">
-        <h2 className="text-2xl font-bold mb-4">Payment History</h2>
+        <h2 className="text-4xl font-extrabold text-center mb-10 bg-gradient-to-r from-[#667eea] to-[#764ba2] bg-clip-text text-transparent">
+          Payment History
+        </h2>
         No payments found.
       </div>
     );

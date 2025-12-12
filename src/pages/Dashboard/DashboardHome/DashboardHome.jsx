@@ -5,6 +5,7 @@ import Loading from '../../Loading/Loading';
 import PaymentHistory from '../PaymentHistory/PaymentHistory';
 import RevenueOverview from './RevenueOverview';
 import MyProfile from '../MyProfile/MyProfile';
+import MyBookedTickets from '../MyBookedTickets/MyBookedTickets';
 
 const DashboardHome = () => {
  const { role, roleLoading } = useRole();
@@ -12,9 +13,9 @@ const DashboardHome = () => {
  if (roleLoading) return <Loading />;
 
 // //  if (role === 'admin') return <AdminDashboardHome />;
-//  if (role === 'vendor') return <RevenueOverview/>;
+ if (role === 'vendor') return <RevenueOverview/>;
 
- return <MyProfile></MyProfile>;
+ return <MyBookedTickets></MyBookedTickets>;
 };
 
 export default DashboardHome;

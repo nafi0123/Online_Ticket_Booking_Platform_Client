@@ -12,3 +12,14 @@
   background-size: 200% 200%;
   animation: gradient-x 15s ease infinite;
 }
+
+
+.swal-dark {
+  background: #1f2937 !important; /* bg-gray-800 */
+  color: #f3f4f6 !important;      /* text-gray-100 */
+}
+
+.swal-light {
+  background: #ffffff !important;
+  color: #1f2937 !important;
+}

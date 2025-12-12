@@ -39,8 +39,11 @@ const AdvertiseTickets = () => {
         confirmButtonText: ticket.advertise
           ? "Yes, unadvertise"
           : "Yes, advertise",
-        background: theme === "dark" ? "#1f2937" : "#ffffff",
-        color: theme === "dark" ? "#f3f4f6" : "#1f2937",
+
+        // 🔥 DARK / LIGHT AUTO APPLY
+        customClass: {
+          popup: theme === "dark" ? "swal-dark" : "swal-light",
+        },
       });
 
       if (confirm) {
@@ -57,6 +60,9 @@ const AdvertiseTickets = () => {
             }!`,
             timer: 1200,
             showConfirmButton: false,
+            customClass: {
+              popup: theme === "dark" ? "swal-dark" : "swal-light",
+            },
           });
           refetch();
         }
@@ -65,6 +71,9 @@ const AdvertiseTickets = () => {
       Swal.fire({
         icon: "error",
         title: err.response?.data?.message || "Something went wrong!",
+        customClass: {
+          popup: theme === "dark" ? "swal-dark" : "swal-light",
+        },
       });
     }
   };

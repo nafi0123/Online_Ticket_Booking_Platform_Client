@@ -10,7 +10,6 @@ const MyAddedTickets = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
 
-  // 🌙 Theme State
   const [theme, setTheme] = useState("light");
 
   useEffect(() => {
@@ -18,8 +17,14 @@ const MyAddedTickets = () => {
     setTheme(savedTheme);
   }, []);
 
+  const getSwalTheme = () => ({
+    popup: theme === "dark" ? "swal-dark" : "swal-light",
+  });
+
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [isRejectedModal, setIsRejectedModal] = useState(false);
+
   const [perksState, setPerksState] = useState({
     ac: false,
     breakfast: false,
@@ -28,7 +33,6 @@ const MyAddedTickets = () => {
     water: false,
     charging: false,
   });
-  const [isRejectedModal, setIsRejectedModal] = useState(false);
 
   const { register, handleSubmit, reset } = useForm();
 
@@ -49,28 +53,27 @@ const MyAddedTickets = () => {
     const rejected = ["reject", "rejected"].includes(
       (ticket.status || "").toLowerCase()
     );
-    setIsRejectedModal(rejected);
 
+    setIsRejectedModal(rejected);
     setSelectedTicket(ticket);
 
-    const perksObj = {
-      ac: ticket.perks?.includes("ac") || false,
-      breakfast: ticket.perks?.includes("breakfast") || false,
-      wifi: ticket.perks?.includes("wifi") || false,
-      tv: ticket.perks?.includes("tv") || false,
-      water: ticket.perks?.includes("water") || false,
-      charging: ticket.perks?.includes("charging") || false,
-    };
-    setPerksState(perksObj);
+    setPerksState({
+      ac: ticket.perks?.includes("ac"),
+      breakfast: ticket.perks?.includes("breakfast"),
+      wifi: ticket.perks?.includes("wifi"),
+      tv: ticket.perks?.includes("tv"),
+      water: ticket.perks?.includes("water"),
+      charging: ticket.perks?.includes("charging"),
+    });
 
     reset({
-      title: ticket.title || "",
-      type: ticket.type || "",
-      from: ticket.from || "",
-      to: ticket.to || "",
-      departure: ticket.departure ? ticket.departure.slice(0, 16) : "",
-      price: ticket.price || "",
-      quantity: ticket.quantity || "",
+      title: ticket.title,
+      type: ticket.type,
+      from: ticket.from,
+      to: ticket.to,
+      departure: ticket.departure?.slice(0, 16),
+      price: ticket.price,
+      quantity: ticket.quantity,
     });
 
     setModalOpen(true);
@@ -84,7 +87,7 @@ const MyAddedTickets = () => {
   const onSubmit = async (data) => {
     if (!selectedTicket || isRejectedModal) return;
 
-    const perksArray = Object.keys(perksState).filter((key) => perksState[key]);
+    const perksArray = Object.keys(perksState).filter((k) => perksState[k]);
 
     try {
       const res = await axiosSecure.patch(`/tickets/${selectedTicket._id}`, {
@@ -95,41 +98,55 @@ const MyAddedTickets = () => {
       });
 
       if (res.data.modifiedCount > 0) {
-        Swal.fire("Updated!", "Ticket updated successfully.", "success");
+        Swal.fire({
+          title: "Updated!",
+          text: "Ticket updated successfully.",
+          icon: "success",
+          customClass: getSwalTheme(),
+        });
         refetch();
         setModalOpen(false);
       }
-    } catch (error) {
-      Swal.fire("Error!", "Failed to update ticket.", "error");
+    } catch {
+      Swal.fire({
+        title: "Error!",
+        text: "Failed to update ticket.",
+        icon: "error",
+        customClass: getSwalTheme(),
+      });
     }
   };
 
   const handleDelete = (ticket) => {
-    const rejected = ["reject", "rejected"].includes(
-      (ticket.status || "").toLowerCase()
-    );
-    if (rejected) return;
+    if (["reject", "rejected"].includes(ticket.status?.toLowerCase())) return;
 
     Swal.fire({
       title: "Are you sure?",
       text: "This ticket will be permanently deleted!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
       confirmButtonText: "Yes, delete it!",
-      background: theme === "dark" ? "#1f2937" : "#ffffff",
-      color: theme === "dark" ? "#f3f4f6" : "#1f2937",
+      customClass: getSwalTheme(),
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
           const res = await axiosSecure.delete(`/tickets/${ticket._id}`);
           if (res.data.deletedCount > 0) {
-            Swal.fire("Deleted!", "Ticket has been removed.", "success");
+            Swal.fire({
+              title: "Deleted!",
+              text: "Ticket has been removed.",
+              icon: "success",
+              customClass: getSwalTheme(),
+            });
             refetch();
           }
-        } catch (error) {
-          Swal.fire("Error!", "Could not delete ticket.", "error");
+        } catch {
+          Swal.fire({
+            title: "Error!",
+            text: "Could not delete ticket.",
+            icon: "error",
+            customClass: getSwalTheme(),
+          });
         }
       }
     });
@@ -139,10 +156,13 @@ const MyAddedTickets = () => {
 
   return (
     <div className="p-6 min-h-screen bg-base-200">
-      {/* 🌙 Theme Toggle Button */}
       <div className="flex justify-end mb-5">
         <button
-          onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+          onClick={() => {
+            const newTheme = theme === "light" ? "dark" : "light";
+            setTheme(newTheme);
+            localStorage.setItem("theme", newTheme);
+          }}
           className="btn btn-sm"
         >
           {theme === "light" ? "Dark Mode" : "Light Mode"}
@@ -154,14 +174,14 @@ const MyAddedTickets = () => {
       </h2>
 
       {myTickets.length === 0 ? (
-        <div className="text-center py-32 text-3xl text-base-content/50">
+        <div className="text-center py-32 text-3xl opacity-50">
           No tickets added yet.
         </div>
       ) : (
-        <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {myTickets.map((ticket) => {
             const isRejected = ["reject", "rejected"].includes(
-              (ticket.status || "").toLowerCase()
+              ticket.status?.toLowerCase()
             );
 
             const statusStyle =
@@ -174,8 +194,8 @@ const MyAddedTickets = () => {
             return (
               <div
                 key={ticket._id}
-                className={`card bg-base-100 shadow-2xl border border-base-300 overflow-hidden ${
-                  isRejected ? "opacity-70 pointer-events-none" : ""
+                className={`card bg-base-100 shadow-xl border border-base-300 ${
+                  isRejected ? "opacity-60 pointer-events-none" : ""
                 }`}
               >
                 <figure className="h-48">
@@ -186,52 +206,41 @@ const MyAddedTickets = () => {
                   />
                 </figure>
 
-                <div className="card-body p-6">
-                  <h3 className="card-title text-xl font-bold">
-                    {ticket.title}
-                  </h3>
-                  <p className="text-base-content/70">
+                <div className="card-body">
+                  <h3 className="text-xl font-bold">{ticket.title}</h3>
+                  <p className="opacity-70">
                     {ticket.from} → {ticket.to}
                   </p>
+
                   <p>
-                    Type: <span className="font-semibold">{ticket.type}</span>
+                    Type: <b>{ticket.type}</b>
                   </p>
+
                   <p>
-                    Price:{" "}
-                    <span className="font-bold text-xl">৳{ticket.price}</span>
+                    Price: <b className="text-xl">৳{ticket.price}</b>
                   </p>
+
                   <p>Seats: {ticket.quantity}</p>
+
                   <p>
                     Departure: {new Date(ticket.departure).toLocaleString()}
                   </p>
 
-                  <div className="mt-4">
-                    <span className={`badge badge-lg ${statusStyle} font-bold`}>
-                      {ticket.status?.toUpperCase() || "PENDING"}
-                    </span>
-                  </div>
+                  <span className={`badge badge-lg mt-3 ${statusStyle}`}>
+                    {ticket.status?.toUpperCase()}
+                  </span>
 
-                  <div className="card-actions mt-6 flex gap-4">
+                  <div className="flex gap-3 mt-4">
                     <button
+                      className="btn flex-1 bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white"
                       onClick={() => handleUpdateClick(ticket)}
-                      disabled={isRejected}
-                      className={`flex-1 btn text-white font-bold ${
-                        isRejected
-                          ? "bg-gray-500 cursor-not-allowed opacity-60"
-                          : "bg-gradient-to-r from-[#667eea] to-[#764ba2] hover:opacity-90 shadow-lg"
-                      }`}
                     >
                       Update
                     </button>
 
                     <button
+                      className="btn btn-error flex-1"
                       onClick={() => handleDelete(ticket)}
-                      disabled={isRejected}
-                      className={`flex-1 btn text-white font-bold ${
-                        isRejected
-                          ? "bg-gray-500 cursor-not-allowed opacity-60"
-                          : "btn btn-error text-white flex items-center"
-                      }`}
                     >
                       Delete
                     </button>
@@ -245,51 +254,23 @@ const MyAddedTickets = () => {
 
       {/* Update Modal */}
       {modalOpen && selectedTicket && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/30 backdrop-blur-sm"></div>
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50">
+          <div className="bg-base-100 rounded-xl shadow-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-base-300">
+            <button
+              onClick={() => setModalOpen(false)}
+              className="btn btn-sm btn-circle absolute right-4 top-4"
+            >
+              ✕
+            </button>
 
-          <div className="relative bg-base-100 rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto p-8 border border-base-300">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-3xl font-extrabold bg-gradient-to-r from-[#667eea] to-[#764ba2] bg-clip-text text-transparent">
-                Update Ticket
-              </h3>
-              <button
-                onClick={() => setModalOpen(false)}
-                className="btn btn-ghost btn-circle text-base-content"
-              >
-                X
-              </button>
-            </div>
+            <h3 className="text-2xl font-bold mb-6">Update Ticket</h3>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-              {/* Inputs */}
-              <div className="grid md:grid-cols-2 gap-6">
-                {[
-                  "title",
-                  "type",
-                  "from",
-                  "to",
-                  "price",
-                  "quantity",
-                  "departure",
-                ].map((field, i) => (
-                  <div key={i}>
-                    <label className="block font-semibold mb-2">
-                      {field.charAt(0).toUpperCase() + field.slice(1)}
-                    </label>
-
-                    {field === "type" ? (
-                      <select
-                        {...register("type")}
-                        className="select select-bordered w-full h-14"
-                        disabled={isRejectedModal}
-                      >
-                        <option>Bus</option>
-                        <option>Train</option>
-                        <option>Launch</option>
-                        <option>Plane</option>
-                      </select>
-                    ) : (
+              <div className="grid grid-cols-2 gap-4">
+                {["title", "from", "to", "price", "quantity", "departure"].map(
+                  (field) => (
+                    <div key={field}>
+                      <label className="font-semibold">{field}</label>
                       <input
                         {...register(field)}
                         type={
@@ -299,67 +280,61 @@ const MyAddedTickets = () => {
                             ? "datetime-local"
                             : "text"
                         }
-                        className="input input-bordered w-full h-14"
+                        className="input input-bordered w-full"
                         disabled={isRejectedModal}
                       />
-                    )}
-                  </div>
-                ))}
+                    </div>
+                  )
+                )}
+
+                <div>
+                  <label className="font-semibold">Type</label>
+                  <select
+                    {...register("type")}
+                    className="select select-bordered w-full"
+                  >
+                    <option>Bus</option>
+                    <option>Train</option>
+                    <option>Plane</option>
+                    <option>Launch</option>
+                  </select>
+                </div>
               </div>
 
-              {/* Perks */}
-              <div className="bg-base-200 p-6 rounded-2xl">
-                <h4 className="font-bold text-lg mb-4">Perks & Facilities</h4>
-                <div className="grid grid-cols-3 gap-4">
+              <div className="bg-base-200 p-4 rounded-xl">
+                <h4 className="font-semibold mb-3">Perks</h4>
+
+                <div className="grid grid-cols-3 gap-2">
                   {Object.keys(perksState).map((perk) => (
-                    <label
-                      key={perk}
-                      className="flex items-center gap-3 cursor-pointer"
-                    >
+                    <label key={perk} className="flex gap-2 items-center">
                       <input
                         type="checkbox"
                         name={perk}
                         checked={perksState[perk]}
                         onChange={handlePerkChange}
                         className="checkbox checkbox-primary"
-                        disabled={isRejectedModal}
                       />
-                      <span className="capitalize font-medium">
-                        {perk === "ac" ? "AC" : perk === "tv" ? "TV" : perk}
-                      </span>
+                      <span className="capitalize">{perk}</span>
                     </label>
                   ))}
                 </div>
               </div>
 
-              {/* Current Image */}
               <div>
-                <label className="block font-semibold mb-2">
-                  Current Image
-                </label>
+                <label className="font-semibold">Current Image</label>
                 <img
                   src={selectedTicket.image}
                   alt="Current"
-                  className="w-full max-w-md rounded-xl shadow-lg"
+                  className="w-60 rounded-lg mt-2"
                 />
               </div>
 
-              <div className="flex justify-end gap-4 pt-6">
-                <button
-                  type="button"
-                  onClick={() => setModalOpen(false)}
-                  className="btn btn-outline"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="btn bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white font-bold"
-                  disabled={isRejectedModal}
-                >
-                  Save Changes
-                </button>
-              </div>
+              <button
+                type="submit"
+                className="btn bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white w-full mt-4"
+              >
+                Save Changes
+              </button>
             </form>
           </div>
         </div>

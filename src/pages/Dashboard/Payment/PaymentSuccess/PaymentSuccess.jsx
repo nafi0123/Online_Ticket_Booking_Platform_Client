@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-// import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { BsCheckCircle } from "react-icons/bs";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import Loading from "../../../Loading/Loading";
@@ -37,65 +36,66 @@ const PaymentSuccess = () => {
   }, [sessionId]);
 
   if (loading) {
-    return (
-      <Loading></Loading>
-    );
+    return <Loading />;
   }
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center p-6"
-      style={{ background: "linear-gradient(180deg, #f0f4f8 0%, #ffffff 100%)" }}
+      className="
+        min-h-screen flex items-center justify-center p-6 
+        bg-gradient-to-b from-[#f0f4f8] to-white 
+        dark:bg-gradient-to-b dark:from-[#0f172a] dark:to-[#1e293b]
+      "
     >
-      <div className="bg-white shadow-2xl rounded-2xl p-10 max-w-md w-full text-center">
+      <div
+        className="
+          bg-white dark:bg-[#1e293b]
+          shadow-2xl rounded-2xl p-10 max-w-md w-full text-center
+          text-gray-900 dark:text-gray-100
+        "
+      >
         {/* Success Icon */}
         <BsCheckCircle className="text-7xl text-primary mx-auto mb-6 animate-bounce" />
 
-        {/* Heading */}
-        <h2 className="text-3xl font-bold text-secondary mb-4">
+        <h2 className="text-3xl font-bold text-secondary dark:text-white mb-4">
           Payment Successful
         </h2>
 
-        <p className="text-gray-600 mb-8">
+        <p className="text-gray-600 dark:text-gray-300 mb-8">
           Your payment has been processed successfully.
         </p>
 
-        {/* Receipt Card */}
-        <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 shadow-sm text-left">
-
+        {/* Receipt Box */}
+        <div
+          className="
+            bg-gray-50 dark:bg-[#0f172a] 
+            p-6 rounded-xl border 
+            border-gray-200 dark:border-gray-600 
+            shadow-sm text-left
+          "
+        >
           <div className="mb-4">
-            <span className="block text-gray-500 font-medium">
+            <span className="block text-gray-500 dark:text-gray-400 font-medium">
               Transaction ID
             </span>
-            <span className="block text-gray-900 font-semibold break-all text-lg">
+            <span className="block text-gray-900 dark:text-gray-100 font-semibold break-all text-lg">
               {paymentInfo.transactionId || "-"}
             </span>
           </div>
 
-          <hr className="my-4 border-gray-300" />
+          <hr className="my-4 border-gray-300 dark:border-gray-700" />
 
-          {/* <div className="mb-4">
-            <span className="block text-gray-500 font-medium">
-              Tracking ID
-            </span>
-            <span className="block text-gray-900 font-semibold break-all text-lg">
-              {paymentInfo.ticketId || "-"}
-            </span>
-          </div> */}
-
-          <hr className="my-4 border-gray-300" />
+          <hr className="my-4 border-gray-300 dark:border-gray-700" />
 
           <div>
-            <span className="block text-gray-500 font-medium">
+            <span className="block text-gray-500 dark:text-gray-400 font-medium">
               Route
             </span>
-            <span className="block text-gray-900 font-semibold break-all text-lg">
+            <span className="block text-gray-900 dark:text-gray-100 font-semibold break-all text-lg">
               {paymentInfo.from} → {paymentInfo.to}
             </span>
           </div>
         </div>
-
-        
       </div>
     </div>
   );

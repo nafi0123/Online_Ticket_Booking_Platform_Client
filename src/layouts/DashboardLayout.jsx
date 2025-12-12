@@ -35,7 +35,7 @@ const DashboardLayout = () => {
         <div className="navbar bg-base-100 shadow-lg border-b border-base-300 sticky top-0 z-50">
           
           {/* Navbar Left Side (Toggle Button and Logo) */}
-          <div className="flex-1 px-4 flex items-center">
+          <div className="flex-1 flex items-center">
             {/* Mobile Drawer Toggle Button */}
             <label
               htmlFor="dashboard-drawer"
@@ -103,9 +103,23 @@ const DashboardLayout = () => {
           {/* Menu */}
           <ul className="menu p-4 space-y-3 flex-1">
             {/* Common */}
+
             <li>
               <NavLink
                 to="/dashboard"
+                end
+                className={({ isActive }) =>
+                  isActive
+                    ? "btn btn-sm w-full justify-start bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white shadow-xl border-none font-bold hover:opacity-95"
+                    : "btn btn-ghost btn-sm w-full justify-start text-base-content hover:bg-base-200"
+                }
+              >
+                Dashboard Home
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="/dashboard/my-profile"
                 end
                 className={({ isActive }) =>
                   isActive

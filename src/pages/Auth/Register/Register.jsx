@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router";
 import useAuth from "../../../hooks/useAuth";
 import SocialLogin from "../SocialLogin/SocialLogin";
-import axios from "axios";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { toast } from "react-hot-toast";
 
@@ -20,65 +19,36 @@ const Register = () => {
     formState: { errors },
   } = useForm();
 
-  const handleRegistration = (data) => {
-    if (!data.photo[0]) {
-      toast.error("Profile photo is required");
-      return;
-    }
+  const handleRegistration = async (data) => {
+    try {
+      // --- Register user in Firebase ---
+      await registerUser(data.email, data.password);
 
-    const profileImg = data.photo[0];
+      const userInfo = {
+        name: data.name,
+        email: data.email,
+        photoURL: data.photo,
+        role: "user",
+        createdAt: new Date(),
+      };
 
-    registerUser(data.email, data.password)
-      .then(() => {
-        const formData = new FormData();
-        formData.append("image", profileImg);
+      // --- Save user in database ---
+      await axiosSecure.post("/users", userInfo);
 
-        const image_API_URL = `https://api.imgbb.com/1/upload?key=${
-          import.meta.env.VITE_image_host_key
-        }`;
+      toast.success("Registration successful!");
 
-        axios
-          .post(image_API_URL, formData)
-          .then((res) => {
-            const photoURL = res.data.data.url;
-            const userInfo = {
-              email: data.email,
-              displayName: data.name,
-              photoURL,
-            };
-
-            // Save to backend
-            axiosSecure
-              .post("/users", userInfo)
-              .then((res) => {
-                if (res.data.insertedId) {
-                  toast.success("Registration successful!");
-                  console.log(res.data.insertedId);
-                }
-              })
-              .catch((err) => {
-                console.error(err);
-                toast.error("Failed to save user to database");
-              });
-
-            // Update Firebase profile
-            const userProfile = { displayName: data.name, photoURL };
-            updateUserProfile(userProfile)
-              .then(() => navigate(location.state?.from || "/"))
-              .catch((err) => {
-                console.error(err);
-                toast.error("Failed to update user profile");
-              });
-          })
-          .catch((err) => {
-            console.error(err);
-            toast.error("Image upload failed");
-          });
-      })
-      .catch((err) => {
-        console.error(err);
-        toast.error(err.message || "Registration failed");
+      // --- Update Firebase profile ---
+      await updateUserProfile({
+        displayName: data.name,
+        photoURL: data.photo,
       });
+
+      // Navigate home
+      navigate(location.state?.from || "/");
+    } catch (err) {
+      console.error(err);
+      toast.error(err.message || "Registration failed");
+    }
   };
 
   return (
@@ -95,7 +65,6 @@ const Register = () => {
                     backgroundImage:
                       'url("https://lh3.googleusercontent.com/aida-public/AB6AXuB9hl0UoUOESCZvsOf0iG21S_fx4ueTegFcnzTPqSXuL8tNQN_lYbf0Qjoa495asvb3HjigHKk0i5VLDNLkPE8ADtDgd9-7o0JG7z8v5HJ4jEGPBTGig6RbyCS39I8lM6DWI7M8q1gPaZBrVONk6oZe4zAHZ-ruU6YrPfWq7eD76m6I6ILqD9kSHBAdGkGc0xcOFdGfEu62A4q81cHWwukbkHvRHIEVVWF93t1yhcbkrUF7BYX2f49ZVcJP5zdsKheHQs64-O_lpT0R")',
                   }}
-                  data-alt="Travel Image"
                 ></div>
               </div>
 
@@ -104,10 +73,10 @@ const Register = () => {
                 <div className="flex flex-col gap-8 w-full max-w-md">
                   {/* TITLE */}
                   <div className="flex flex-col gap-2">
-                    <p className="text-slate-800 dark:text-slate-200 text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em]">
+                    <p className="text-slate-800 dark:text-slate-200 text-3xl md:text-4xl font-black">
                       Create Account
                     </p>
-                    <p className="text-slate-500 dark:text-slate-400 text-base font-normal leading-normal">
+                    <p className="text-slate-500 dark:text-slate-400">
                       Register to access all features
                     </p>
                   </div>
@@ -118,15 +87,19 @@ const Register = () => {
                     className="flex flex-col gap-4"
                   >
                     {/* Name */}
-                    <label className="flex flex-col min-w-40 flex-1">
-                      <span className="text-slate-800 dark:text-slate-200 text-base font-medium pb-2">
+                    <label className="flex flex-col">
+                      <span className="pb-2 text-slate-800 dark:text-slate-200 font-medium">
                         Name
                       </span>
                       <input
                         type="text"
                         placeholder="Enter your name"
                         {...register("name", { required: "Name is required" })}
-                        className="form-input w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-background-light dark:bg-background-dark p-4 text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary"
+                        className="w-full rounded-lg border border-slate-300 dark:border-slate-600 
+                      bg-background-light dark:bg-[#1f1f1f]
+                      p-4 text-slate-900 dark:text-white 
+                      placeholder-slate-400 dark:placeholder-slate-500
+                      focus:outline-none focus:ring-2 focus:ring-primary/50"
                       />
                       {errors.name && (
                         <span className="text-red-500 text-sm">
@@ -136,8 +109,8 @@ const Register = () => {
                     </label>
 
                     {/* Email */}
-                    <label className="flex flex-col min-w-40 flex-1">
-                      <span className="text-slate-800 dark:text-slate-200 text-base font-medium pb-2">
+                    <label className="flex flex-col">
+                      <span className="pb-2 text-slate-800 dark:text-slate-200 font-medium">
                         Email
                       </span>
                       <input
@@ -146,7 +119,11 @@ const Register = () => {
                         {...register("email", {
                           required: "Email is required",
                         })}
-                        className="form-input w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-background-light dark:bg-background-dark p-4 text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary"
+                        className="w-full rounded-lg border border-slate-300 dark:border-slate-600 
+                      bg-background-light dark:bg-[#1f1f1f]
+                      p-4 text-slate-900 dark:text-white 
+                      placeholder-slate-400 dark:placeholder-slate-500
+                      focus:outline-none focus:ring-2 focus:ring-primary/50"
                       />
                       {errors.email && (
                         <span className="text-red-500 text-sm">
@@ -155,72 +132,83 @@ const Register = () => {
                       )}
                     </label>
 
-                    {/* Photo */}
-                    <label className="flex flex-col min-w-40 flex-1">
-                      <span className="text-slate-800 dark:text-slate-200 text-base font-medium pb-2">
-                        Profile Photo
+                    {/* Photo URL */}
+                    <label className="flex flex-col">
+                      <span className="pb-2 text-slate-800 dark:text-slate-200 font-medium">
+                        Photo URL
                       </span>
                       <input
-                        type="file"
-                        accept="image/*"
-                        {...register("photo", { required: "Profile photo is required" })}
-                        className="file-input w-full mt-1"
+                        type="text"
+                        placeholder="Enter photo URL"
+                        {...register("photo", {
+                          required: "Photo URL is required",
+                        })}
+                        className="w-full rounded-lg border border-slate-300 dark:border-slate-600 
+                      bg-background-light dark:bg-[#1f1f1f]
+                      p-4 text-slate-900 dark:text-white 
+                      placeholder-slate-400 dark:placeholder-slate-500
+                      focus:outline-none focus:ring-2 focus:ring-primary/50"
                       />
                       {errors.photo && (
-                        <span className="text-red-500 text-sm">{errors.photo.message}</span>
+                        <span className="text-red-500 text-sm">
+                          {errors.photo.message}
+                        </span>
                       )}
                     </label>
 
                     {/* Password */}
-                    <label className="flex flex-col min-w-40 flex-1">
-                      <span className="text-slate-800 dark:text-slate-200 text-base font-medium pb-2">
+                    <label className="flex flex-col">
+                      <span className="pb-2 text-slate-800 dark:text-slate-200 font-medium">
                         Password
                       </span>
-                      <div className="relative flex items-center">
+                      <div className="relative">
                         <input
                           type={showPassword ? "text" : "password"}
                           placeholder="Enter your password"
                           {...register("password", {
                             required: "Password is required",
-                            minLength: { value: 6, message: "At least 6 characters" },
-                            pattern: {
-                              value: /^(?=.*[a-z])(?=.*[A-Z]).*$/,
-                              message: "Must contain uppercase & lowercase",
+                            minLength: {
+                              value: 6,
+                              message: "At least 6 characters",
                             },
                           })}
-                          className="form-input w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-background-light dark:bg-background-dark p-4 text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary"
+                          className="w-full rounded-lg border border-slate-300 dark:border-slate-600 
+                      bg-background-light dark:bg-[#1f1f1f]
+                      p-4 text-slate-900 dark:text-white 
+                      placeholder-slate-400 dark:placeholder-slate-500
+                      focus:outline-none focus:ring-2 focus:ring-primary/50"
                         />
                         <button
                           type="button"
                           onClick={() => setShowPassword(!showPassword)}
-                          className="absolute right-3 text-slate-500 dark:text-slate-400"
+                          className="absolute right-3 top-3 text-slate-500"
                         >
                           {showPassword ? "Hide" : "Show"}
                         </button>
                       </div>
                       {errors.password && (
-                        <span className="text-red-500 text-sm">{errors.password.message}</span>
+                        <span className="text-red-500 text-sm">
+                          {errors.password.message}
+                        </span>
                       )}
                     </label>
 
                     {/* Submit */}
                     <button
                       type="submit"
-                      className="btn w-full border-none text-white bg-gradient-to-r from-[#667eea] to-[#764ba2] hover:opacity-90"
+                      className="btn w-full bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white"
                     >
                       Register
                     </button>
                   </form>
 
                   {/* SOCIAL LOGIN */}
-                  <div>
-                    <SocialLogin />
-                  </div>
+                  <SocialLogin />
 
                   {/* LOGIN LINK */}
-                  <p className="text-center text-sm text-slate-500 dark:text-slate-400">
+                  <p className="text-center text-sm text-slate-500">
                     Already have an account?{" "}
-                    <Link className="font-bold text-primary hover:underline" to="/login">
+                    <Link className="font-bold text-primary" to="/login">
                       Log In
                     </Link>
                   </p>

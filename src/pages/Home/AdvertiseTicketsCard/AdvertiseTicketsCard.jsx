@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import useAxios from "../../../hooks/useAxios";
@@ -7,6 +7,8 @@ import Loading from "../../Loading/Loading";
 const AdvertiseTicketsCard = () => {
   const axiosPublic = useAxios();
   const navigate = useNavigate();
+
+
 
   const { data: advertiseTickets = [], isLoading } = useQuery({
     queryKey: ["advertise-tickets"],
