@@ -21,18 +21,18 @@ const Register = () => {
 
   const handleRegistration = async (data) => {
     try {
-      // --- Register user in Firebase ---
+ 
       await registerUser(data.email, data.password);
 
       const userInfo = {
-        name: data.name,
+        displayName: data.name,
         email: data.email,
         photoURL: data.photo,
         role: "user",
         createdAt: new Date(),
       };
 
-      // --- Save user in database ---
+ 
       await axiosSecure.post("/users", userInfo);
 
       toast.success("Registration successful!");

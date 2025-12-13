@@ -26,7 +26,7 @@ const UserManagement = () => {
     },
   });
 
-  // ------------------ ROLE UPDATE ------------------
+
   const handleRole = async (user, role) => {
     Swal.fire({
       title: `Change Role?`,
@@ -63,7 +63,7 @@ const UserManagement = () => {
     });
   };
 
-  // ------------------ MARK AS FRAUD ------------------
+  
   const handleFraud = async (user) => {
     Swal.fire({
       title: "Mark as Fraud?",
