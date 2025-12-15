@@ -123,7 +123,6 @@
 ### Backend
 
 - `express`
-- `mongoose`
 - `cors`
 - `dotenv`
 - `jsonwebtoken`
