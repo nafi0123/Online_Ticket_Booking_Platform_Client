@@ -20,7 +20,7 @@ const subtitles = [
 
 const Banner = () => {
   return (
-    <section className="mt-4">
+    <section className="">
       <Carousel
         autoPlay={true}
         infiniteLoop={true}
