@@ -4,7 +4,7 @@ import Loading from '../../Loading/Loading';
 
 import PaymentHistory from '../PaymentHistory/PaymentHistory';
 import RevenueOverview from './RevenueOverview';
-import MyProfile from '../MyProfile/MyProfile';
+
 import MyBookedTickets from '../MyBookedTickets/MyBookedTickets';
 import AdminDashboardHome from './AdminDashboardHome';
 

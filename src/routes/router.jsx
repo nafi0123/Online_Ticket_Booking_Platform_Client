@@ -12,7 +12,7 @@ import ManageTickets from "../pages/Dashboard/ManageTickets/ManageTickets.JSX";
 import AdminRoute from "./AdminRoute/AdminRoute";
 import VendorRoute from "./VendorRoute/VendorRoute";
 import MyAddedTickets from "../pages/Dashboard/MyAddedTickets/MyAddedTickets";
-import MyProfile from "../pages/Dashboard/MyProfile/MyProfile";
+// import MyProfile from "../pages/Dashboard/MyProfile/MyProfile";
 import AdvertiseTickets from "../pages/Dashboard/AdvertiseTickets/AdvertiseTickets";
 import UserManagement from "../pages/Dashboard/UserManagement/UserManagement";
 import AllTickets from "../pages/Home/AllTickets/AllTickets";
@@ -26,6 +26,9 @@ import PaymentCancelled from "../pages/Dashboard/Payment/PaymentCancelled/Paymen
 import PaymentHistory from "../pages/Dashboard/PaymentHistory/PaymentHistory";
 import RevenueOverview from "../pages/Dashboard/DashboardHome/RevenueOverview";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
+import MyProfile from "../pages/Shared/MyProfile/MyProfile";
+import About from "../pages/Home/About/About";
+import Contact from "../pages/Home/Contact/Contact";
 
 export const router = createBrowserRouter([
   {
@@ -36,6 +39,14 @@ export const router = createBrowserRouter([
       {
         index: true,
         Component: HomePage,
+      },
+      {
+        path: "/about",
+        Component: About,
+      },
+      {
+        path: "/contact",
+        Component: Contact,
       },
       {
         path: "/login",
