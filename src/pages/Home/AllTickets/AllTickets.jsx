@@ -19,7 +19,7 @@ const AllTickets = () => {
   const [sort, setSort] = useState("");
   const [page, setPage] = useState(1);
 
-  const ticketsPerPage = 6;
+  const ticketsPerPage = 8;
 
   // Query with all filters
   const { data, isLoading, isFetching, refetch } = useQuery({
@@ -166,7 +166,7 @@ const AllTickets = () => {
         <>
           {/* Tickets Grid */}
           <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
               {tickets.map((ticket) => (
                 <div
                   key={ticket._id}

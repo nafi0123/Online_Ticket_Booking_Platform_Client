@@ -18,12 +18,10 @@ const LatestTickets = () => {
 
   if (isLoading) return <Loading />;
 
-  if (!latestTickets || latestTickets.length === 0) {
-    return null; 
-  }
+  if (!latestTickets || latestTickets.length === 0) return null;
 
   return (
-    <section className="py-16 px-4 bg-gradient-to-b ">
+    <section className="py-16 px-4 bg-gradient-to-b">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
@@ -35,19 +33,18 @@ const LatestTickets = () => {
           </p>
         </div>
 
-        {/* Premium Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Tickets Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
           {latestTickets.map((ticket) => (
             <div
               key={ticket._id}
-              className="group relative bg-base-100 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 border border-base-300 transform hover:-translate-y-3"
+              className="group relative bg-base-100 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 border border-base-300 flex flex-col transform hover:-translate-y-2"
             >
-              {/* Image with Overlay */}
-              <div className="relative h-64 overflow-hidden">
+              {/* Image */}
+              <div className="relative h-48 md:h-56 overflow-hidden">
                 <img
                   src={
-                    ticket.image ||
-                    "https://i.ibb.co.com/5jxK5hY/placeholder.jpg"
+                    ticket.image || "https://i.ibb.co/5jxK5hY/placeholder.jpg"
                   }
                   alt={ticket.title}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
@@ -55,32 +52,35 @@ const LatestTickets = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
 
                 {/* Price Badge */}
-                <div className="absolute bottom-4 left-4 text-white z-10">
-                  <p className="text-4xl font-bold drop-shadow-lg">
+                <div className="absolute bottom-3 left-3 text-white z-10">
+                  <p className="text-2xl font-bold drop-shadow-lg">
                     ৳{ticket.price}
                   </p>
-                  <p className="text-sm opacity-90">per seat</p>
+                  <p className="text-xs opacity-90">per seat</p>
                 </div>
 
                 {/* New Badge */}
-                <div className="absolute top-4 right théor-4 bg-green-500 text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg animate-pulse">
+                <div className="absolute top-3 right-3 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg animate-pulse">
                   New
                 </div>
               </div>
 
               {/* Card Body */}
-              <div className="p-6 space-y-4">
-                <h3 className="text-2xl font-bold text-primary line-clamp-1">
+              <div className="p-4 flex flex-col flex-1">
+                {/* Title */}
+                <h3 className="text-lg md:text-xl font-bold text-primary line-clamp-1">
                   {ticket.title}
                 </h3>
 
-                <p className="text-lg font-medium flex items-center gap-2">
+                {/* From → To */}
+                <p className="text-sm font-medium flex items-center gap-2 mt-1">
                   <span className="text-base-content/80">{ticket.from}</span>
-                  <span className="text-2xl">→</span>
+                  <span className="text-lg">→</span>
                   <span className="text-base-content/80">{ticket.to}</span>
                 </p>
 
-                <div className="flex flex-wrap gap-2 text-sm">
+                {/* Type & Quantity Badges */}
+                <div className="flex flex-wrap gap-2 mt-2 text-sm">
                   <span className="badge badge-lg badge-primary">
                     {ticket.type}
                   </span>
@@ -93,10 +93,10 @@ const LatestTickets = () => {
                   </span>
                 </div>
 
-                {/* Perks */}
+                {/* Perks (show 2 + "more" if extra) */}
                 {ticket.perks && ticket.perks.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
-                    {ticket.perks.map((perk, idx) => (
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {ticket.perks.slice(0, 2).map((perk, idx) => (
                       <span
                         key={idx}
                         className="badge badge-outline badge-sm font-medium border-primary text-primary"
@@ -108,10 +108,16 @@ const LatestTickets = () => {
                           : perk.charAt(0).toUpperCase() + perk.slice(1)}
                       </span>
                     ))}
+                    {ticket.perks.length > 2 && (
+                      <span className="badge badge-outline badge-sm font-medium border-primary text-primary">
+                        +{ticket.perks.length - 2} more
+                      </span>
+                    )}
                   </div>
                 )}
 
-                <p className="text-sm text-base-content/70">
+                {/* Departure */}
+                <p className="text-sm text-base-content/70 mt-2">
                   Departure: {new Date(ticket.departure).toLocaleDateString()}{" "}
                   at{" "}
                   {new Date(ticket.departure).toLocaleTimeString([], {
@@ -120,18 +126,13 @@ const LatestTickets = () => {
                   })}
                 </p>
 
-                {/* Action Button */}
+                {/* Book Now Button */}
                 <button
                   onClick={() => navigate(`/ticket-details/${ticket._id}`)}
-                  className="btn btn-lg w-full mt-4 bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white font-bold text-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 border-0"
+                  className="btn w-full mt-auto bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white font-bold text-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 border-0"
                 >
                   Book Now
                 </button>
-              </div>
-
-              {/* Shine Effect on Hover */}
-              <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
               </div>
             </div>
           ))}

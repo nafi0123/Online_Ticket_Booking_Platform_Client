@@ -40,7 +40,7 @@ const AdvertiseTickets = () => {
           ? "Yes, unadvertise"
           : "Yes, advertise",
 
-        // 🔥 DARK / LIGHT AUTO APPLY
+   
         customClass: {
           popup: theme === "dark" ? "swal-dark" : "swal-light",
         },

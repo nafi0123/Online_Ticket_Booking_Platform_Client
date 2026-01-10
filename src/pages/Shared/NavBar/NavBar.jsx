@@ -72,16 +72,7 @@ const NavBar = () => {
             </NavLink>
           </li>
 
-          {/* My Profile */}
-          <li>
-            <NavLink
-              to="/dashboard/my-profile"
-              className="flex items-center gap-2 font-semibold hover:text-[#667eea]"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-               My Profile
-            </NavLink>
-          </li>
+         
 
           {/* Dashboard */}
           <li>
