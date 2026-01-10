@@ -1,25 +1,23 @@
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { Link, useLocation, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 import SocialLogin from "../SocialLogin/SocialLogin";
 import { toast } from "react-hot-toast";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-
   const { signInUser } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleLogin = (data) => {
-    signInUser(data.email, data.password)
+  // Normal email/password login
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    signInUser(email, password)
       .then(() => {
         toast.success("Login successful!");
         navigate(location?.state?.from || "/");
@@ -27,6 +25,28 @@ const Login = () => {
       .catch((err) => {
         console.error(err);
         toast.error(err.message || "Login failed. Please try again.");
+      });
+  };
+
+  // Demo login function
+  const handleDemoLogin = (role) => {
+    let demoEmail = "";
+    const demoPassword = "nafi570N@";
+
+    if (role === "admin") demoEmail = "nafi.cse0123@gmail.com";
+    if (role === "vendor") demoEmail = "nafi.mahmud0123@gmail.com";
+
+    setEmail(demoEmail);
+    setPassword(demoPassword);
+
+    signInUser(demoEmail, demoPassword)
+      .then(() => {
+        toast.success(`${role.toUpperCase()} demo login successful!`);
+        navigate(location?.state?.from || "/");
+      })
+      .catch((err) => {
+        console.error(err);
+        toast.error("Demo login failed");
       });
   };
 
@@ -60,62 +80,43 @@ const Login = () => {
                   </p>
                 </div>
 
-                {/* FORM */}
-                <form
-                  onSubmit={handleSubmit(handleLogin)}
-                  className="flex flex-col gap-4"
-                >
-                  {/* EMAIL */}
+                {/* NORMAL LOGIN FORM */}
+                <form onSubmit={handleLogin} className="flex flex-col gap-4">
                   <label className="flex flex-col">
                     <span className="text-slate-900 dark:text-white text-base font-medium pb-1">
                       Email Address
                     </span>
-
                     <input
                       type="email"
                       placeholder="Enter your email"
-                       value={email}
-                      {...register("email", { required: "Email is required" })}
-                       onChange={(e) => setEmail(e.target.value)}
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       className="w-full rounded-lg border border-slate-300 dark:border-slate-600 
-                      bg-background-light dark:bg-[#1f1f1f]
-                      p-4 text-slate-900 dark:text-white 
-                      placeholder-slate-400 dark:placeholder-slate-500
-                      focus:outline-none focus:ring-2 focus:ring-primary/50"
+                        bg-background-light dark:bg-[#1f1f1f]
+                        p-4 text-slate-900 dark:text-white 
+                        placeholder-slate-400 dark:placeholder-slate-500
+                        focus:outline-none focus:ring-2 focus:ring-primary/50"
+                      required
                     />
-
-                    {errors.email && (
-                      <span className="text-red-500 text-sm mt-1">
-                        {errors.email.message}
-                      </span>
-                    )}
                   </label>
 
-                  {/* PASSWORD */}
                   <label className="flex flex-col">
                     <span className="text-slate-900 dark:text-white text-base font-medium pb-1">
                       Password
                     </span>
-
                     <div className="relative flex items-center">
                       <input
                         type={showPassword ? "text" : "password"}
                         placeholder="Enter your password"
-                        {...register("password", {
-                          required: "Password is required",
-                          minLength: {
-                            value: 6,
-                            message: "Password must be at least 6 characters",
-                          },
-                        })}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                         className="w-full rounded-lg border border-slate-300 dark:border-slate-600 
                         bg-background-light dark:bg-[#1f1f1f]
                         p-4 text-slate-900 dark:text-white 
                         placeholder-slate-400 dark:placeholder-slate-500
                         focus:outline-none focus:ring-2 focus:ring-primary/50"
+                        required
                       />
-
-                      {/* SHOW/HIDE */}
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
@@ -124,15 +125,8 @@ const Login = () => {
                         {showPassword ? "Hide" : "Show"}
                       </button>
                     </div>
-
-                    {errors.password && (
-                      <span className="text-red-500 text-sm mt-1">
-                        {errors.password.message}
-                      </span>
-                    )}
                   </label>
 
-                  {/* FORGOT PASSWORD */}
                   <div className="flex justify-end -mt-1">
                     <Link
                       state={{ email }}
@@ -143,7 +137,6 @@ const Login = () => {
                     </Link>
                   </div>
 
-                  {/* SUBMIT */}
                   <button
                     type="submit"
                     className="btn border-none text-white bg-gradient-to-r from-[#667eea] to-[#764ba2] hover:opacity-90"
@@ -151,6 +144,23 @@ const Login = () => {
                     Log In
                   </button>
                 </form>
+
+                {/* DEMO LOGIN BUTTONS */}
+                <div className="flex flex-col gap-2">
+                  <button
+                    onClick={() => handleDemoLogin("admin")}
+                    className="btn btn-outline w-full border-[#667eea] text-[#667eea]"
+                  >
+                    Login as Admin (Demo)
+                  </button>
+
+                  <button
+                    onClick={() => handleDemoLogin("vendor")}
+                    className="btn btn-outline w-full border-[#764ba2] text-[#764ba2]"
+                  >
+                    Login as Vendor (Demo)
+                  </button>
+                </div>
 
                 {/* SOCIAL LOGIN */}
                 <SocialLogin />
