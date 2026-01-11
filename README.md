@@ -88,12 +88,12 @@
 
 ### Admin
 
-- Email: `nafi.cse0123@gmail.com`
+- Email: `demoadmin@gmail.com`
 - Password: `nafi570N@`
 
 ### Vendor
 
-- Email: `nafi.mahmud0123@gmail.com`
+- Email: `demovedor@gmail.com`
 - Password: `nafi570N@`
 
 > You can register new users or use Google Sign-In.
