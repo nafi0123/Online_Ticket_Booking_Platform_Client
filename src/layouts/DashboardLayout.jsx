@@ -199,7 +199,7 @@ const DashboardLayout = () => {
                   </NavLink>
                 </li>
 
-                <li>
+                {/* <li>
                   <NavLink
                     to="/dashboard/revenue-overview"
                     className={({ isActive }) =>
@@ -210,7 +210,7 @@ const DashboardLayout = () => {
                   >
                     <FaMoneyBillWave /> Revenue Overview
                   </NavLink>
-                </li>
+                </li> */}
               </>
             )}
 

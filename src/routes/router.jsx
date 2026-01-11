@@ -75,9 +75,9 @@ export const router = createBrowserRouter([
             `https://online-ticket-booking-platform-serv.vercel.app/tickets-details-card/${params.id}`
           ),
         element: (
-          <PrivateRoute>
+          // <PrivateRoute>
             <ViewDetailsCard></ViewDetailsCard>
-          </PrivateRoute>
+          // </PrivateRoute>
         ),
         hydrateFallbackElement: <Loading></Loading>,
       },

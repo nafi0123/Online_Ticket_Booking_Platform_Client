@@ -157,16 +157,7 @@ const MyAddedTickets = () => {
   return (
     <div className="p-6 min-h-screen bg-base-200">
       <div className="flex justify-end mb-5">
-        <button
-          onClick={() => {
-            const newTheme = theme === "light" ? "dark" : "light";
-            setTheme(newTheme);
-            localStorage.setItem("theme", newTheme);
-          }}
-          className="btn btn-sm"
-        >
-          {theme === "light" ? "Dark Mode" : "Light Mode"}
-        </button>
+        
       </div>
 
       <h2 className="text-4xl font-extrabold text-center mb-10 bg-gradient-to-r from-[#667eea] to-[#764ba2] bg-clip-text text-transparent">
