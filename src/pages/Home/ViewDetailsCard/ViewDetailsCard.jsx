@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLoaderData } from "react-router";
+import { useLoaderData, useNavigate, useLocation } from "react-router";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useAuth from "../../../hooks/useAuth";
 import Swal from "sweetalert2";
@@ -8,6 +8,9 @@ const ViewDetailsCard = () => {
   const ticket = useLoaderData();
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
+
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const [countdown, setCountdown] = useState("");
   const [bookingQty, setBookingQty] = useState(1);
@@ -62,6 +65,29 @@ const ViewDetailsCard = () => {
     else setQtyError("");
   };
 
+  /* ---------------- Book Now Click (LOGIN CHECK) ---------------- */
+  const handleBookNowClick = () => {
+    if (!user) {
+      Swal.fire({
+        icon: "warning",
+        title: "Login Required",
+        text: "Please login to book tickets",
+        confirmButtonText: "Go to Login",
+        background: theme === "dark" ? "#1f2937" : "#ffffff",
+        color: theme === "dark" ? "#f3f4f6" : "#1f2937",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate("/login", {
+            state: { from: location.pathname },
+          });
+        }
+      });
+      return;
+    }
+
+    document.getElementById("booking_modal").showModal();
+  };
+
   /* ---------------- Submit ---------------- */
   const handleBookingSubmit = async (e) => {
     e.preventDefault();
@@ -77,10 +103,8 @@ const ViewDetailsCard = () => {
       return;
     }
 
-    // ✅ Close DaisyUI modal first
     document.getElementById("booking_modal").close();
 
-    // ✅ Confirm Alert
     const confirm = await Swal.fire({
       title: "Confirm Booking?",
       html: `<b>${bookingQty} × ${ticket.title}</b><br/>
@@ -113,9 +137,6 @@ const ViewDetailsCard = () => {
         status: "Pending",
       });
 
-      console.log("Booking response:", res.data);
-
-      // ✅ Fixed success check
       if (res.data.insertedId || res.data.acknowledged === true) {
         Swal.fire({
           icon: "success",
@@ -134,17 +155,13 @@ const ViewDetailsCard = () => {
           icon: "error",
           title: "Booking Failed!",
           text: res.data.message || "Something went wrong",
-          background: theme === "dark" ? "#1f2937" : "#ffffff",
-          color: theme === "dark" ? "#f3f4f6" : "#1f2937",
         });
       }
     } catch (err) {
       Swal.fire({
         icon: "error",
         title: "Booking Failed!",
-        text: err.response?.data?.message || "Network error. Try again.",
-        background: theme === "dark" ? "#1f2937" : "#ffffff",
-        color: theme === "dark" ? "#f3f4f6" : "#1f2937",
+        text: err.response?.data?.message || "Network error",
       });
     } finally {
       setIsSubmitting(false);
@@ -157,7 +174,6 @@ const ViewDetailsCard = () => {
     <div className="min-h-screen bg-base-200 py-8 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="card bg-base-100 shadow-2xl rounded-2xl">
-          {/* Image */}
           <figure className="h-72">
             <img
               src={ticket.image}
@@ -205,9 +221,7 @@ const ViewDetailsCard = () => {
             <div className="card-actions justify-center mt-8">
               <button
                 disabled={isSoldOut}
-                onClick={() =>
-                  document.getElementById("booking_modal").showModal()
-                }
+                onClick={handleBookNowClick}
                 className="btn btn-lg bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white"
               >
                 {isSoldOut ? "Sold Out / Departed" : "Book Now"}

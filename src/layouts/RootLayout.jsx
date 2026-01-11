@@ -18,25 +18,21 @@ const RootLayout = () => {
       {/* NavBar Wrapper */}
       <div
         className={`
-          sticky top-0 z-50 shadow-md 
-          ${
-            theme === "dark"
-              ? " shadow-[0_2px_10px_rgba(0,0,0,0.6)]"
-              : " shadow"
-          }
-        `}
+          sticky top-0 z-50 `}
       >
-        <div className="max-w-7xl mx-auto">
+        {/* max-w-7xl mx-auto */}
+        <div className="">
           <NavBar />
         </div>
       </div>
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto z-1000 ">
-         {state == "loading" ? <Loading></Loading> : <Outlet></Outlet>}
+        {state == "loading" ? <Loading></Loading> : <Outlet></Outlet>}
       </main>
 
-      <div className="max-w-7xl mx-auto">
+      {/* max-w-7xl mx-auto */}
+      <div className="">
         <Footer></Footer>
       </div>
     </div>
