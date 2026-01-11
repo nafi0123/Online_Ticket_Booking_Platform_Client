@@ -29,12 +29,18 @@ const Login = () => {
   };
 
   // Demo login function
+//   demovedor@gmail.com
+// nafi570N@
+// https://i.ibb.co.com/4gRbJLrg/vendorpic.png
+
+
+// demoadmin@gmail.com
   const handleDemoLogin = (role) => {
     let demoEmail = "";
     const demoPassword = "nafi570N@";
 
-    if (role === "admin") demoEmail = "nafi.cse0123@gmail.com";
-    if (role === "vendor") demoEmail = "nafi.mahmud0123@gmail.com";
+    if (role === "admin") demoEmail = "demoadmin@gmail.com";
+    if (role === "vendor") demoEmail = "demovedor@gmail.com";
 
     setEmail(demoEmail);
     setPassword(demoPassword);
