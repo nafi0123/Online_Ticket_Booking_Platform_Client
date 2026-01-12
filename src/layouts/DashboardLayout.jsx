@@ -34,12 +34,15 @@ const DashboardLayout = () => {
       <input id="dashboard-drawer" type="checkbox" className="drawer-toggle" />
 
       {/* ================= MAIN CONTENT ================= */}
-      <div className="drawer-content flex flex-col">
+      <div className="drawer-content flex flex-col min-h-screen">
         {/* Navbar */}
         <div className="sticky top-0 z-50 bg-base-100 border-b border-base-300">
-          <div className="navbar  px-8 md:px-6 lg:px-12">
+          <div className="navbar px-4 md:px-6 lg:px-12">
             <div className="flex-1 flex items-center gap-3">
-              <label htmlFor="dashboard-drawer" className="btn btn-ghost lg:hidden">
+              <label
+                htmlFor="dashboard-drawer"
+                className="btn btn-ghost lg:hidden text-xl"
+              >
                 ☰
               </label>
 
@@ -53,9 +56,7 @@ const DashboardLayout = () => {
               </NavLink>
             </div>
 
-            <div className=" font-bold text-lg pr-2">
-              Dashboard
-            </div>
+            <div className="font-bold text-lg pr-2">Dashboard</div>
           </div>
         </div>
 
@@ -69,36 +70,58 @@ const DashboardLayout = () => {
       <div className="drawer-side z-50">
         <label htmlFor="dashboard-drawer" className="drawer-overlay"></label>
 
-        <aside className="w-72 bg-base-100 border-r border-base-300 flex flex-col">
+        {/* 🔥 FIXED: full height sidebar */}
+        <aside className="w-72 min-h-screen bg-base-100 border-r border-base-300 flex flex-col">
           {/* Sidebar Header */}
           <div className="p-6 bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white">
             <h2 className="text-2xl font-extrabold">My Dashboard</h2>
             <p className="text-sm opacity-90">Manage everything easily</p>
           </div>
 
-          {/* Menu */}
-          <ul className="p-4 space-y-2 flex-1">
+          {/* 🔥 FIXED: menu scrolls till footer */}
+          <ul className="p-4 space-y-2 flex-1 overflow-y-auto pb-24">
             {/* Common */}
             <li>
-              <NavLink to="/dashboard" end className={({ isActive }) => isActive ? activeClass : normalClass}>
+              <NavLink
+                to="/dashboard"
+                end
+                className={({ isActive }) =>
+                  isActive ? activeClass : normalClass
+                }
+              >
                 Dashboard Home
               </NavLink>
             </li>
 
             <li>
-              <NavLink to="/dashboard/my-profile" className={({ isActive }) => isActive ? activeClass : normalClass}>
+              <NavLink
+                to="/dashboard/my-profile"
+                className={({ isActive }) =>
+                  isActive ? activeClass : normalClass
+                }
+              >
                 <FaUser /> My Profile
               </NavLink>
             </li>
 
             <li>
-              <NavLink to="/dashboard/my-bookings" className={({ isActive }) => isActive ? activeClass : normalClass}>
+              <NavLink
+                to="/dashboard/my-bookings"
+                className={({ isActive }) =>
+                  isActive ? activeClass : normalClass
+                }
+              >
                 <FaTicketAlt /> My Bookings
               </NavLink>
             </li>
 
             <li>
-              <NavLink to="/dashboard/payment-history" className={({ isActive }) => isActive ? activeClass : normalClass}>
+              <NavLink
+                to="/dashboard/payment-history"
+                className={({ isActive }) =>
+                  isActive ? activeClass : normalClass
+                }
+              >
                 <FaHistory /> Payment History
               </NavLink>
             </li>
@@ -107,19 +130,34 @@ const DashboardLayout = () => {
             {role === "vendor" && (
               <>
                 <li>
-                  <NavLink to="/dashboard/add-ticket" className={({ isActive }) => isActive ? activeClass : normalClass}>
+                  <NavLink
+                    to="/dashboard/add-ticket"
+                    className={({ isActive }) =>
+                      isActive ? activeClass : normalClass
+                    }
+                  >
                     <FaPlus /> Add Ticket
                   </NavLink>
                 </li>
 
                 <li>
-                  <NavLink to="/dashboard/my-added-tickets" className={({ isActive }) => isActive ? activeClass : normalClass}>
+                  <NavLink
+                    to="/dashboard/my-added-tickets"
+                    className={({ isActive }) =>
+                      isActive ? activeClass : normalClass
+                    }
+                  >
                     <FaClipboardList /> My Tickets
                   </NavLink>
                 </li>
 
                 <li>
-                  <NavLink to="/dashboard/requested-bookings" className={({ isActive }) => isActive ? activeClass : normalClass}>
+                  <NavLink
+                    to="/dashboard/requested-bookings"
+                    className={({ isActive }) =>
+                      isActive ? activeClass : normalClass
+                    }
+                  >
                     <FaHandPaper /> Requested Bookings
                   </NavLink>
                 </li>
@@ -130,19 +168,34 @@ const DashboardLayout = () => {
             {role === "admin" && (
               <>
                 <li>
-                  <NavLink to="/dashboard/manage-tickets" className={({ isActive }) => isActive ? activeClass : normalClass}>
+                  <NavLink
+                    to="/dashboard/manage-tickets"
+                    className={({ isActive }) =>
+                      isActive ? activeClass : normalClass
+                    }
+                  >
                     <FaCogs /> Manage Tickets
                   </NavLink>
                 </li>
 
                 <li>
-                  <NavLink to="/dashboard/advertise-tickets" className={({ isActive }) => isActive ? activeClass : normalClass}>
+                  <NavLink
+                    to="/dashboard/advertise-tickets"
+                    className={({ isActive }) =>
+                      isActive ? activeClass : normalClass
+                    }
+                  >
                     <FaMoneyBillWave /> Advertise Tickets
                   </NavLink>
                 </li>
 
                 <li>
-                  <NavLink to="/dashboard/user-management" className={({ isActive }) => isActive ? activeClass : normalClass}>
+                  <NavLink
+                    to="/dashboard/user-management"
+                    className={({ isActive }) =>
+                      isActive ? activeClass : normalClass
+                    }
+                  >
                     <FaUsers /> User Management
                   </NavLink>
                 </li>
