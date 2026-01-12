@@ -22,7 +22,7 @@ const RootLayout = () => {
       >
         {/* max-w-7xl mx-auto */}
         <div className="">
-          <NavBar />
+          <NavBar  />
         </div>
       </div>
 
